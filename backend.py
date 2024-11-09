@@ -3,13 +3,14 @@ import logging
 import pystray
 from PIL import Image, ImageDraw
 import threading
-import sys
+import os
 import win32gui
 import win32process
 import psutil
-import time  # Add this import
+import time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+exit_flag = False
 
 def create_icon():
     image = Image.new('RGB', (64, 64), "white")
@@ -18,9 +19,10 @@ def create_icon():
     return image
 
 def on_exit(icon):
-    icon.stop()
+    global exit_flag
     keyboard.unhook_all()
-    sys.exit()
+    icon.stop()
+    os._exit(0)
 
 def run_tray():
     icon = pystray.Icon("keyboard_listener", create_icon(), "Keyboard Listener", menu=pystray.Menu(
@@ -38,8 +40,9 @@ def get_foreground_process_name():
         return "Unknown"
 
 def monitor_foreground_process():
+    global exit_flag
     last_process = None
-    while True:
+    while not exit_flag:
         process_name = get_foreground_process_name()
         if process_name != last_process:
             logging.info(f'Foreground process changed to {process_name}')
@@ -56,7 +59,7 @@ def on_key(event):
 threading.Thread(target=run_tray).start()
 
 # Start monitoring the foreground process
-threading.Thread(target=monitor_foreground_process, daemon=True).start()
+monitor_thread = threading.Thread(target=monitor_foreground_process, daemon=True).start()
 
 keyboard.on_press(on_key)
 keyboard.wait()
