@@ -10,22 +10,21 @@ import psutil
 import time
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
-exit_flag = False
+
+
 
 def create_icon():
-    image = Image.new('RGB', (64, 64), "white")
-    draw = ImageDraw.Draw(image)
-    draw.rectangle([0, 0, 64, 64], fill="black")
+    image = Image.open("assets/icon.png")
+    ImageDraw.Draw(image)
     return image
 
 def on_exit(icon):
-    global exit_flag
     keyboard.unhook_all()
     icon.stop()
     os._exit(0)
 
 def run_tray():
-    icon = pystray.Icon("keyboard_listener", create_icon(), "Keyboard Listener", menu=pystray.Menu(
+    icon = pystray.Icon("bag_on_key", create_icon(), "BagOnKey", menu=pystray.Menu(
         pystray.MenuItem('Exit', on_exit)
     ))
     icon.run()
@@ -40,9 +39,8 @@ def get_foreground_process_name():
         return "Unknown"
 
 def monitor_foreground_process():
-    global exit_flag
     last_process = None
-    while not exit_flag:
+    while True:
         process_name = get_foreground_process_name()
         if process_name != last_process:
             logging.info(f'Foreground process changed to {process_name}')

@@ -3,3 +3,5 @@ pystray
 Pillow
 pywin32
 psutil
+pyside6
+pyqt6-tools
