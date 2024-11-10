@@ -8,26 +8,38 @@ import win32gui
 import win32process
 import psutil
 import time
+import sys
+from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtUiTools import QUiLoader
+
+loader = QUiLoader()
+app = QtWidgets.QApplication(sys.argv)
+app.setQuitOnLastWindowClosed(False)
+dialog = loader.load("resources/interface.ui", None)
+dialog.show()
+
+key_to_button = {
+    'f13': dialog.button1,
+    'f14': dialog.button2,
+    'f15': dialog.button3,
+    'f16': dialog.button4,
+    'f17': dialog.button5,
+    'f18': dialog.button6,
+    'f19': dialog.button7,
+    'f20': dialog.button8,
+    'f21': dialog.button9,
+    'f22': dialog.button10,
+    'f23': dialog.button11,
+    'f24': dialog.button12,
+    # Add more keys once the knobs are defined
+}
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
-
-
 
 def create_icon():
     image = Image.open("assets/icon.png")
     ImageDraw.Draw(image)
     return image
-
-def on_exit(icon):
-    keyboard.unhook_all()
-    icon.stop()
-    os._exit(0)
-
-def run_tray():
-    icon = pystray.Icon("bag_on_key", create_icon(), "BagOnKey", menu=pystray.Menu(
-        pystray.MenuItem('Exit', on_exit)
-    ))
-    icon.run()
 
 def get_foreground_process_name():
     hwnd = win32gui.GetForegroundWindow()
@@ -38,26 +50,67 @@ def get_foreground_process_name():
     except psutil.Error:
         return "Unknown"
 
-def monitor_foreground_process():
-    last_process = None
+last_process = None
+
+def monitor_foreground_process_thread():
+    global last_process
     while True:
         process_name = get_foreground_process_name()
         if process_name != last_process:
             logging.info(f'Foreground process changed to {process_name}')
             last_process = process_name
-        time.sleep(0.5)  # Adjust the sleep interval as needed
+        time.sleep(0.5)  # Adjust the interval as needed
 
-def on_key(event):
-    if event.name in ['f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24']:
-        process_name = get_foreground_process_name()
-        keyboard.press_and_release('win')
-        logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
+def on_button_click(event):
+    button = key_to_button.get(event.name)
+    process_name = get_foreground_process_name()
+    logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
+    if button:
+        button.setStyleSheet("border: 3px solid red;")
 
-# Start the tray icon thread
-threading.Thread(target=run_tray).start()
+def on_button_release(event):
+    button = key_to_button.get(event.name)
+    if button:
+        button.setStyleSheet("border: 3px solid black;")
 
-# Start monitoring the foreground process
-monitor_thread = threading.Thread(target=monitor_foreground_process, daemon=True).start()
+def on_dialog_close(event):
+    dialog.hide()
+    event.ignore()
 
-keyboard.on_press(on_key)
-keyboard.wait()
+dialog.closeEvent = on_dialog_close
+
+# Create the system tray icon
+tray_icon = QtWidgets.QSystemTrayIcon(QtGui.QIcon("assets/icon.png"))
+tray_icon.setToolTip("BagOnKey")
+
+# Create the menu for the tray icon and keep a reference to it
+tray_menu = QtWidgets.QMenu(dialog)
+open_action = tray_menu.addAction("Open")
+exit_action = tray_menu.addAction("Exit")
+tray_icon.setContextMenu(tray_menu)
+
+# Connect the actions
+open_action.triggered.connect(dialog.show)
+exit_action.triggered.connect(app.quit)
+
+# Handle tray icon activation
+def on_tray_icon_activated(reason):
+    if reason == QtWidgets.QSystemTrayIcon.Trigger:
+        dialog.show()
+
+tray_icon.activated.connect(on_tray_icon_activated)
+
+tray_icon.show()
+
+# Start the background thread
+threading.Thread(target=monitor_foreground_process_thread, daemon=True).start()
+
+# Show the dialog and start the application event loop
+dialog.show()
+
+# Set up keyboard event handlers
+for key in key_to_button.keys():
+    keyboard.on_press_key(key, on_button_click)
+    keyboard.on_release_key(key, on_button_release)
+
+app.exec()

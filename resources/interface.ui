@@ -6,34 +6,52 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>789</width>
-    <height>600</height>
+    <width>886</width>
+    <height>704</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>7900</width>
+    <height>6000</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <widget class="QGroupBox" name="horizontalGroupBox">
     <property name="geometry">
      <rect>
       <x>190</x>
       <y>30</y>
-      <width>561</width>
-      <height>331</height>
+      <width>668</width>
+      <height>409</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0px solid black;</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
-      <number>12</number>
+      <number>0</number>
      </property>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGraphicsView" name="graphicsView_2">
+        <widget class="QGraphicsView" name="button1">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -45,6 +63,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -52,7 +73,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView_4">
+        <widget class="QGraphicsView" name="button5">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -64,6 +85,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -71,7 +95,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView">
+        <widget class="QGraphicsView" name="button9">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -83,6 +107,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -94,7 +121,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QGraphicsView" name="graphicsView_3">
+        <widget class="QGraphicsView" name="button2">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -106,6 +133,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -113,7 +143,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView_7">
+        <widget class="QGraphicsView" name="button6">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -125,6 +155,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -132,7 +165,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView_6">
+        <widget class="QGraphicsView" name="button10">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -144,6 +177,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -155,7 +191,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QGraphicsView" name="graphicsView_11">
+        <widget class="QGraphicsView" name="button3">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -167,6 +203,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -174,7 +213,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView_12">
+        <widget class="QGraphicsView" name="button7">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -186,6 +225,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -193,7 +235,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView_10">
+        <widget class="QGraphicsView" name="button11">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -205,6 +247,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -216,7 +261,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QGraphicsView" name="graphicsView_8">
+        <widget class="QGraphicsView" name="button4">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -228,6 +273,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -235,7 +283,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView_9">
+        <widget class="QGraphicsView" name="button8">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -247,6 +295,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -254,7 +305,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView_5">
+        <widget class="QGraphicsView" name="button12">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -266,6 +317,9 @@
            <width>100</width>
            <height>100</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 3px solid black;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -277,21 +331,133 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QDial" name="dial"/>
+        <widget class="QDial" name="dial1">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="font">
+          <font>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="minimum">
+          <number>50</number>
+         </property>
+         <property name="maximum">
+          <number>50</number>
+         </property>
+         <property name="tracking">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QDial" name="dial_2"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QGraphicsView" name="graphicsView">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 3px solid black;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="graphicsView_2">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 3px solid black;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QDial" name="dial2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimum">
+          <number>50</number>
+         </property>
+         <property name="maximum">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QGraphicsView" name="graphicsView_3">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 3px solid black;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="graphicsView_5">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 3px solid black;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
     </layout>
    </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QListWidget" name="functionsList">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>380</y>
-      <width>761</width>
+      <x>20</x>
+      <y>460</y>
+      <width>841</width>
       <height>201</height>
      </rect>
     </property>
@@ -305,11 +471,19 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <bold>false</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Current Profile</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
     </property>
    </widget>
    <widget class="Line" name="line">
@@ -325,7 +499,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget_2">
+   <widget class="QListWidget" name="profileList">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -353,8 +527,11 @@
     <property name="wordWrap">
      <bool>true</bool>
     </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
    </widget>
-   <widget class="QToolButton" name="toolButton">
+   <widget class="QToolButton" name="processSelectButton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -369,6 +546,29 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>profileList</tabstop>
+  <tabstop>processSelectButton</tabstop>
+  <tabstop>button1</tabstop>
+  <tabstop>button2</tabstop>
+  <tabstop>button3</tabstop>
+  <tabstop>button4</tabstop>
+  <tabstop>button5</tabstop>
+  <tabstop>button6</tabstop>
+  <tabstop>button7</tabstop>
+  <tabstop>button8</tabstop>
+  <tabstop>button9</tabstop>
+  <tabstop>button10</tabstop>
+  <tabstop>button11</tabstop>
+  <tabstop>button12</tabstop>
+  <tabstop>functionsList</tabstop>
+  <tabstop>graphicsView</tabstop>
+  <tabstop>graphicsView_2</tabstop>
+  <tabstop>graphicsView_3</tabstop>
+  <tabstop>graphicsView_5</tabstop>
+  <tabstop>dial1</tabstop>
+  <tabstop>dial2</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
