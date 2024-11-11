@@ -15,7 +15,34 @@ from functools import partial
 
 import shortcut
 
-loader = QUiLoader()
+class DropLabel(QtWidgets.QGraphicsView):
+    def __init__(self, *args, **kwargs):
+        super(DropLabel, self).__init__(*args, **kwargs)
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, e):
+        self.setStyleSheet("border: 3px solid green;")
+        e.accept()
+
+    def dragLeaveEvent(self, e):
+        self.setStyleSheet("border: 3px solid black;")
+        e.accept()
+
+    def dropEvent(self, e):
+        self.setStyleSheet("border: 3px solid black;")
+        widget = e.source()
+        print(f"Button label: {widget.data}")
+        e.accept()
+
+class CustomUiLoader(QUiLoader):
+    def createWidget(self, className, parent=None, name=''):
+        if className == 'DropLabel':
+            widget = DropLabel(parent)
+            widget.setObjectName(name)
+            return widget
+        return super().createWidget(className, parent, name)
+
+loader = CustomUiLoader()
 app = QtWidgets.QApplication(sys.argv)
 app.setQuitOnLastWindowClosed(False)
 dialog = loader.load("resources/interface.ui", None)
@@ -104,8 +131,35 @@ def on_tray_icon_activated(reason):
 tray_icon.activated.connect(on_tray_icon_activated)
 tray_icon.show()
 
+def refresh_description(desc):
+    #safely remove all widgets from the layout using deleteLater
+    for i in reversed(range(description_layout.count())):
+        description_layout.itemAt(i).widget().deleteLater()
+    description_layout.addWidget(QtWidgets.QLabel(desc))
+
+
 # Start the background thread
 threading.Thread(target=monitor_foreground_process_thread, daemon=True).start()
+
+class DragButton(QtWidgets.QPushButton):
+    def __init__(self, label, *args, **kwargs):
+        super().__init__(label, *args, **kwargs)
+        self.data = label
+
+    def mouseMoveEvent(self, e):
+        if e.buttons() == QtCore.Qt.MouseButton.LeftButton:
+            drag = QtGui.QDrag(self)
+            mime = QtCore.QMimeData()
+            drag.setMimeData(mime)
+            self.setContentsMargins(25, 5, 25, 5)
+            self.setStyleSheet("border: 1px solid black;")
+
+            pixmap = QtGui.QPixmap(self.size())
+            self.render(pixmap)
+            drag.setPixmap(pixmap)
+
+            drag.exec(QtCore.Qt.DropAction.MoveAction)
+            self.show() 
 
 # Show the dialog and start the application event loop
 scroll_area = dialog.ideasList
@@ -117,18 +171,15 @@ description_widget = QtWidgets.QWidget()
 description_layout = QtWidgets.QVBoxLayout()
 
 for i in shortcut.shortcuts:
-    button = QtWidgets.QPushButton(i.name)
-    # execute the function when the button is clicked, using keyboard.press_and_release
-    button.clicked.connect(partial(keyboard.press_and_release, i.function))
-    # log the function name when the button is clicked
-    button.clicked.connect(partial(logging.info, f'Function {i.function} executed'))
-    # when I click the button, insert a label with the description of the function
-    button.clicked.connect(partial(description_layout.addWidget, QtWidgets.QLabel(i.description)))
+    button = DragButton(i.name)
+    button.clicked.connect(lambda _, desc=i.description: refresh_description(desc))
     content_layout.addWidget(button)
     
 
 content_widget.setLayout(content_layout)
 scroll_area.setWidget(content_widget)
+description_widget.setLayout(description_layout)
+description_scroll_area.setWidget(description_widget)
 dialog.show()
 
 # Set up keyboard event handlers

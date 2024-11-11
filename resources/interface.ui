@@ -51,7 +51,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGraphicsView" name="button1">
+        <widget class="DropLabel" name="button1">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -73,7 +73,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button5">
+        <widget class="DropLabel" name="button5">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -95,7 +95,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button9">
+        <widget class="DropLabel" name="button9">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -121,7 +121,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QGraphicsView" name="button2">
+        <widget class="DropLabel" name="button2">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -143,7 +143,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button6">
+        <widget class="DropLabel" name="button6">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -165,7 +165,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button10">
+        <widget class="DropLabel" name="button10">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -191,7 +191,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QGraphicsView" name="button3">
+        <widget class="DropLabel" name="button3">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -213,7 +213,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button7">
+        <widget class="DropLabel" name="button7">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -235,7 +235,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button11">
+        <widget class="DropLabel" name="button11">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -261,7 +261,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QGraphicsView" name="button4">
+        <widget class="DropLabel" name="button4">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -283,7 +283,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button8">
+        <widget class="DropLabel" name="button8">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -305,7 +305,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="button12">
+        <widget class="DropLabel" name="button12">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -354,7 +354,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QGraphicsView" name="graphicsView">
+          <widget class="DropLabel" name="graphicsView">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -373,7 +373,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="graphicsView_2">
+          <widget class="DropLabel" name="graphicsView_2">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -409,7 +409,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QGraphicsView" name="graphicsView_3">
+          <widget class="DropLabel" name="graphicsView_3">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -428,7 +428,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="graphicsView_5">
+          <widget class="DropLabel" name="graphicsView_5">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -582,6 +582,13 @@
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DropLabel</class>
+   <extends>QGraphicsView</extends>
+   <header>droplabel.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>profileList</tabstop>
   <tabstop>processSelectButton</tabstop>
