@@ -11,6 +11,9 @@ import time
 import sys
 from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtUiTools import QUiLoader
+from functools import partial
+
+import shortcut
 
 loader = QUiLoader()
 app = QtWidgets.QApplication(sys.argv)
@@ -99,13 +102,33 @@ def on_tray_icon_activated(reason):
         dialog.show()
 
 tray_icon.activated.connect(on_tray_icon_activated)
-
 tray_icon.show()
 
 # Start the background thread
 threading.Thread(target=monitor_foreground_process_thread, daemon=True).start()
 
 # Show the dialog and start the application event loop
+scroll_area = dialog.ideasList
+content_widget = QtWidgets.QWidget()
+content_layout = QtWidgets.QVBoxLayout()
+
+description_scroll_area = dialog.description
+description_widget = QtWidgets.QWidget()
+description_layout = QtWidgets.QVBoxLayout()
+
+for i in shortcut.shortcuts:
+    button = QtWidgets.QPushButton(i.name)
+    # execute the function when the button is clicked, using keyboard.press_and_release
+    button.clicked.connect(partial(keyboard.press_and_release, i.function))
+    # log the function name when the button is clicked
+    button.clicked.connect(partial(logging.info, f'Function {i.function} executed'))
+    # when I click the button, insert a label with the description of the function
+    button.clicked.connect(partial(description_layout.addWidget, QtWidgets.QLabel(i.description)))
+    content_layout.addWidget(button)
+    
+
+content_widget.setLayout(content_layout)
+scroll_area.setWidget(content_widget)
 dialog.show()
 
 # Set up keyboard event handlers

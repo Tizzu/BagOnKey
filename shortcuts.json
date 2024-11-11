@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Copy",
+        "description": "Copies the selected text",
+        "function": "ctrl+c"
+    },
+    {
+        "name": "Cut",
+        "description": "Cuts the selected text",
+        "function": "ctrl+x"
+    },
+    {
+        "name": "Paste",
+        "description": "Pastes the copied text",
+        "function": "ctrl+v"
+    },
+    {
+        "name": "Undo",
+        "description": "Undo the last action",
+        "function": "ctrl+z"
+    },
+    {
+        "name": "Redo",
+        "description": "Redo the last action",
+        "function": "ctrl+y"
+    },
+    {
+        "name": "Save",
+        "description": "Save the current file",
+        "function": "ctrl+s"
+    },
+    {
+        "name": "Volume Up",
+        "description": "Increase the volume",
+        "function": "volume up"
+    },
+    {
+        "name": "Volume Down",
+        "description": "Decrease the volume",
+        "function": "volume down"
+    },
+    {
+        "name": "Mute",
+        "description": "Mute the volume",
+        "function": "volume mute"
+    },
+    {
+        "name": "Play/Pause",
+        "description": "Play the media",
+        "function": "play/pause media"
+    },
+    {
+        "name": "Next",
+        "description": "Play the next media",
+        "function": "next track"
+    },
+    {
+        "name": "Previous",
+        "description": "Play the previous media",
+        "function": "previous track"
+    }
+]

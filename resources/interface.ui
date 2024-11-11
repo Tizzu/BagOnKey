@@ -452,16 +452,6 @@
      </item>
     </layout>
    </widget>
-   <widget class="QListWidget" name="functionsList">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>460</y>
-      <width>841</width>
-      <height>201</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -544,6 +534,52 @@
      <string>None (click to select)</string>
     </property>
    </widget>
+   <widget class="QScrollArea" name="ideasList">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>450</y>
+      <width>631</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>629</width>
+       <height>239</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QScrollArea" name="description">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>450</y>
+      <width>201</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>199</width>
+       <height>239</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <tabstops>
@@ -561,7 +597,6 @@
   <tabstop>button10</tabstop>
   <tabstop>button11</tabstop>
   <tabstop>button12</tabstop>
-  <tabstop>functionsList</tabstop>
   <tabstop>graphicsView</tabstop>
   <tabstop>graphicsView_2</tabstop>
   <tabstop>graphicsView_3</tabstop>
