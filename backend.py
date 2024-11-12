@@ -38,6 +38,12 @@ class DropLabel(QtWidgets.QPushButton):
         # update the button text
         self.setText(widget.data)
         e.accept()
+    
+    def enterEvent(self, e):
+        self.setStyleSheet("border: 3px solid blue;")
+
+    def leaveEvent(self, e):
+        self.setStyleSheet("border: 3px solid black;")
         
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.RightButton:
@@ -206,14 +212,13 @@ class DragButton(QtWidgets.QPushButton):
         super().__init__(label, *args, **kwargs)
         self.data = label
         self.shortcut = shortcut
+        self.setStyleSheet("border: 1px solid black; padding: 5px;")
 
     def mouseMoveEvent(self, e):
         if e.buttons() == QtCore.Qt.MouseButton.LeftButton:
             drag = QtGui.QDrag(self)
             mime = QtCore.QMimeData()
             drag.setMimeData(mime)
-            self.setContentsMargins(25, 5, 25, 5)
-            self.setStyleSheet("border: 1px solid black;")
 
             pixmap = QtGui.QPixmap(self.size())
             self.render(pixmap)
@@ -242,6 +247,12 @@ content_widget.setLayout(content_layout)
 scroll_area.setWidget(content_widget)
 description_widget.setLayout(description_layout)
 description_scroll_area.setWidget(description_widget)
+
+# Get the "actionExit" menu item from the menu bar
+exit_menu_bar = dialog.actionExit
+# Connect the "triggered" signal to the "close" slot, with PySide6 syntax
+exit_menu_bar.triggered.connect(app.quit)
+
 dialog.show()
 
 # Set up keyboard event handlers

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>965</width>
-    <height>704</height>
+    <height>728</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -599,16 +599,6 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QListWidget" name="profileList">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>100</y>
-      <width>131</width>
-      <height>81</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
@@ -690,7 +680,109 @@
      </property>
     </widget>
    </widget>
+   <widget class="QScrollArea" name="profileList">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>110</y>
+      <width>131</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="widgetResizable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="scrollAreaWidgetContents_3">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>129</width>
+       <height>78</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>965</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuProfile">
+    <property name="title">
+     <string>Profile</string>
+    </property>
+    <widget class="QMenu" name="menuCurrent_Profile">
+     <property name="title">
+      <string>Current Profile</string>
+     </property>
+     <addaction name="actionRename"/>
+     <addaction name="actionDelete"/>
+    </widget>
+    <addaction name="actionAdd_new_profile"/>
+    <addaction name="menuCurrent_Profile"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuProfile"/>
+  </widget>
+  <action name="actionAdd_new_profile">
+   <property name="text">
+    <string>Add New Profile</string>
+   </property>
+  </action>
+  <action name="actionDelete_Profile">
+   <property name="text">
+    <string>Delete Profile</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit the program completely. You can also do it by right-clicking the tray icon and selecting &quot;Exit&quot;.</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionBagOnKey">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>BagOnKey</string>
+   </property>
+   <property name="statusTip">
+    <string/>
+   </property>
+  </action>
+  <action name="actionMade_with_by_Tizzu">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Made with ❤️ by Tizzu</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -700,7 +792,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>profileList</tabstop>
   <tabstop>processSelectButton</tabstop>
   <tabstop>dial1</tabstop>
   <tabstop>dial2</tabstop>
