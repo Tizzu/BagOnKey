@@ -11,9 +11,8 @@ import time
 import sys
 from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtUiTools import QUiLoader
-from functools import partial
 
-import shortcut
+import shortcut, profiles
 
 class DropLabel(QtWidgets.QGraphicsView):
     def __init__(self, *args, **kwargs):
@@ -32,6 +31,10 @@ class DropLabel(QtWidgets.QGraphicsView):
         self.setStyleSheet("border: 3px solid black;")
         widget = e.source()
         print(f"Button label: {widget.data}")
+        # add the shortcut to the current profile
+        current_profile[button_to_array_index.get(self.objectName())] = (widget.data, widget.shortcut)
+        print(f"Current profile: {current_profile}")
+        # update the button text
         e.accept()
 
 class CustomUiLoader(QUiLoader):
@@ -46,7 +49,12 @@ loader = CustomUiLoader()
 app = QtWidgets.QApplication(sys.argv)
 app.setQuitOnLastWindowClosed(False)
 dialog = loader.load("resources/interface.ui", None)
+dialog.setWindowTitle("BagOnKey")
+dialog.setWindowIcon(QtGui.QIcon("assets/icon.png"))
 dialog.show()
+
+current_profile = [("", "")] * 12
+# current_profile = profiles.load_profile('profiles/default.json') # Load the default profile
 
 key_to_button = {
     'f13': dialog.button1,
@@ -62,6 +70,52 @@ key_to_button = {
     'f23': dialog.button11,
     'f24': dialog.button12,
     # Add more keys once the knobs are defined
+}
+
+button_to_key = {
+    "button1": 'f13',
+    "button2": 'f14',
+    "button3": 'f15',
+    "button4": 'f16',
+    "button5": 'f17',
+    "button6": 'f18',
+    "button7": 'f19',
+    "button8": 'f20',
+    "button9": 'f21',
+    "button10": 'f22',
+    "button11": 'f23',
+    "button12": 'f24',
+}
+
+button_to_array_index = {
+    "button1": 0,
+    "button2": 1,
+    "button3": 2,
+    "button4": 3,
+    "button5": 4,
+    "button6": 5,
+    "button7": 6,
+    "button8": 7,
+    "button9": 8,
+    "button10": 9,
+    "button11": 10,
+    "button12": 11,
+}
+
+
+key_to_array_index = {
+    'f13': 0,
+    'f14': 1,
+    'f15': 2,
+    'f16': 3,
+    'f17': 4,
+    'f18': 5,
+    'f19': 6,
+    'f20': 7,
+    'f21': 8,
+    'f22': 9,
+    'f23': 10,
+    'f24': 11,
 }
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -95,8 +149,12 @@ def on_button_click(event):
     button = key_to_button.get(event.name)
     process_name = get_foreground_process_name()
     logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
+    command = current_profile[key_to_array_index.get(event.name)][1]
     if button:
-        button.setStyleSheet("border: 3px solid red;")
+            button.setStyleSheet("border: 3px solid red;")
+    if (command != ""):
+        keyboard.press_and_release(command)
+
 
 def on_button_release(event):
     button = key_to_button.get(event.name)
@@ -142,9 +200,10 @@ def refresh_description(desc):
 threading.Thread(target=monitor_foreground_process_thread, daemon=True).start()
 
 class DragButton(QtWidgets.QPushButton):
-    def __init__(self, label, *args, **kwargs):
+    def __init__(self, label, shortcut, *args, **kwargs):
         super().__init__(label, *args, **kwargs)
         self.data = label
+        self.shortcut = shortcut
 
     def mouseMoveEvent(self, e):
         if e.buttons() == QtCore.Qt.MouseButton.LeftButton:
@@ -171,7 +230,8 @@ description_widget = QtWidgets.QWidget()
 description_layout = QtWidgets.QVBoxLayout()
 
 for i in shortcut.shortcuts:
-    button = DragButton(i.name)
+    button = DragButton(i.name, i.function)
+    # log the function of the button
     button.clicked.connect(lambda _, desc=i.description: refresh_description(desc))
     content_layout.addWidget(button)
     
