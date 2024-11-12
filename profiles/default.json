@@ -2,6 +2,30 @@
     "profileName": "default",
     "layout": [
         {
+            "name": "Volume Down",
+            "command": "volume down"
+        },
+        {
+            "name": "Volume Up",
+            "command": "volume up"
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
             "name": "",
             "command": ""
         },

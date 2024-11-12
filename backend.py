@@ -1,9 +1,7 @@
 import keyboard
 import logging
-import pystray
 from PIL import Image, ImageDraw
 import threading
-import os
 import win32gui
 import win32process
 import psutil
@@ -14,7 +12,7 @@ from PySide6.QtUiTools import QUiLoader
 
 import shortcut, profiles
 
-class DropLabel(QtWidgets.QGraphicsView):
+class DropLabel(QtWidgets.QPushButton):
     def __init__(self, *args, **kwargs):
         super(DropLabel, self).__init__(*args, **kwargs)
         self.setAcceptDrops(True)
@@ -33,10 +31,12 @@ class DropLabel(QtWidgets.QGraphicsView):
         print(f"Button label: {widget.data}")
         # add the shortcut to the current profile
         shortcut = profiles.ProfileShortcut(widget.data, widget.shortcut)
-        current_profile.layout[button_to_array_index.get(self.objectName())] = shortcut
+        button_list = list(button_to_key.keys())
+        current_profile.layout[button_list.index(self.objectName())] = shortcut
         print(f"Current profile: {current_profile}")
         save_profile()
         # update the button text
+        self.setText(widget.data)
         e.accept()
         
     def mousePressEvent(self, event):
@@ -49,7 +49,9 @@ class DropLabel(QtWidgets.QGraphicsView):
 
         action = context_menu.exec(self.mapToGlobal(event.position().toPoint()))
         if action == action1:
-            current_profile.layout[button_to_array_index.get(self.objectName())] = profiles.ProfileShortcut("", "")
+            button_list = list(button_to_key.keys())
+            current_profile.layout[button_list.index(self.objectName())] = profiles.ProfileShortcut("", "")
+            self.setText("None")
             save_profile()
 
 def save_profile():
@@ -66,12 +68,11 @@ class CustomUiLoader(QUiLoader):
 loader = CustomUiLoader()
 app = QtWidgets.QApplication(sys.argv)
 app.setQuitOnLastWindowClosed(False)
+app.setWindowIcon(QtGui.QIcon("assets/icon.png"))
 dialog = loader.load("resources/interface.ui", None)
 dialog.setWindowTitle("BagOnKey")
 dialog.setWindowIcon(QtGui.QIcon("assets/icon.png"))
 dialog.show()
-
-current_profile = profiles.load_profile('profiles/default.json') # Load the default profile
 
 key_to_button = {
     'f13': dialog.button1,
@@ -104,36 +105,17 @@ button_to_key = {
     "button12": 'f24',
 }
 
-button_to_array_index = {
-    "button1": 0,
-    "button2": 1,
-    "button3": 2,
-    "button4": 3,
-    "button5": 4,
-    "button6": 5,
-    "button7": 6,
-    "button8": 7,
-    "button9": 8,
-    "button10": 9,
-    "button11": 10,
-    "button12": 11,
-}
+def load_profile(profile_name):
+    profile = profiles.load_profile(f'profiles/{profile_name}.json')
+    # for each dialog button, set the text to the corresponding shortcut name
+    for i, button in enumerate(key_to_button.values()):
+        if profile.layout[i].name == "":
+            button.setText("None")
+        else: 
+            button.setText(profile.layout[i].name)
+    return profile
 
-
-key_to_array_index = {
-    'f13': 0,
-    'f14': 1,
-    'f15': 2,
-    'f16': 3,
-    'f17': 4,
-    'f18': 5,
-    'f19': 6,
-    'f20': 7,
-    'f21': 8,
-    'f22': 9,
-    'f23': 10,
-    'f24': 11,
-}
+current_profile = load_profile("default")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
@@ -168,7 +150,8 @@ def on_button_click(event):
     button = key_to_button.get(event.name)
     process_name = get_foreground_process_name()
     logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
-    command = current_profile.layout[key_to_array_index.get(event.name)].command
+    button_list = list(button_to_key.values())
+    command = current_profile.layout[button_list.index(event.name)].command
     if button:
             button.setStyleSheet("border: 3px solid red;")
     if (command != ""):

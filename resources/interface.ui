@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>886</width>
+    <width>965</width>
     <height>704</height>
    </rect>
   </property>
@@ -31,7 +31,7 @@
      <rect>
       <x>190</x>
       <y>30</y>
-      <width>668</width>
+      <width>761</width>
       <height>409</height>
      </rect>
     </property>
@@ -64,11 +64,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -86,11 +89,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -108,11 +114,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -134,11 +143,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -156,11 +168,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -178,11 +193,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -204,11 +222,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -226,11 +247,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -248,11 +272,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -274,11 +301,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -296,11 +326,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -309,7 +342,7 @@
          <property name="minimumSize">
           <size>
            <width>100</width>
-           <height>100</height>
+           <height>99</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -318,11 +351,14 @@
            <height>100</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">border: 3px solid black;</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="text">
+          <string>None</string>
          </property>
         </widget>
        </item>
@@ -354,7 +390,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="DropLabel" name="graphicsView">
+          <widget class="DropLabel" name="knob1">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -367,13 +403,19 @@
              <height>100</height>
             </size>
            </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: 3px solid black;</string>
+           </property>
+           <property name="text">
+            <string>None</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="DropLabel" name="graphicsView_2">
+          <widget class="DropLabel" name="knob2">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -386,8 +428,39 @@
              <height>100</height>
             </size>
            </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: 3px solid black;</string>
+           </property>
+           <property name="text">
+            <string>None</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="DropLabel" name="knob3">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 3px solid black;</string>
+           </property>
+           <property name="text">
+            <string>None</string>
            </property>
           </widget>
          </item>
@@ -409,7 +482,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="DropLabel" name="graphicsView_3">
+          <widget class="DropLabel" name="knob4">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -422,13 +495,19 @@
              <height>100</height>
             </size>
            </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: 3px solid black;</string>
+           </property>
+           <property name="text">
+            <string>None</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="DropLabel" name="graphicsView_5">
+          <widget class="DropLabel" name="knob5">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -441,8 +520,39 @@
              <height>100</height>
             </size>
            </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">border: 3px solid black;</string>
+           </property>
+           <property name="text">
+            <string>None</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="DropLabel" name="knob6">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 3px solid black;</string>
+           </property>
+           <property name="text">
+            <string>None</string>
            </property>
           </widget>
          </item>
@@ -539,7 +649,7 @@
      <rect>
       <x>10</x>
       <y>450</y>
-      <width>631</width>
+      <width>721</width>
       <height>241</height>
      </rect>
     </property>
@@ -551,7 +661,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>629</width>
+       <width>719</width>
        <height>239</height>
       </rect>
      </property>
@@ -560,7 +670,7 @@
    <widget class="QScrollArea" name="description">
     <property name="geometry">
      <rect>
-      <x>650</x>
+      <x>740</x>
       <y>450</y>
       <width>201</width>
       <height>241</height>
@@ -585,29 +695,13 @@
  <customwidgets>
   <customwidget>
    <class>DropLabel</class>
-   <extends>QGraphicsView</extends>
+   <extends>QPushButton</extends>
    <header>droplabel.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>profileList</tabstop>
   <tabstop>processSelectButton</tabstop>
-  <tabstop>button1</tabstop>
-  <tabstop>button2</tabstop>
-  <tabstop>button3</tabstop>
-  <tabstop>button4</tabstop>
-  <tabstop>button5</tabstop>
-  <tabstop>button6</tabstop>
-  <tabstop>button7</tabstop>
-  <tabstop>button8</tabstop>
-  <tabstop>button9</tabstop>
-  <tabstop>button10</tabstop>
-  <tabstop>button11</tabstop>
-  <tabstop>button12</tabstop>
-  <tabstop>graphicsView</tabstop>
-  <tabstop>graphicsView_2</tabstop>
-  <tabstop>graphicsView_3</tabstop>
-  <tabstop>graphicsView_5</tabstop>
   <tabstop>dial1</tabstop>
   <tabstop>dial2</tabstop>
  </tabstops>
