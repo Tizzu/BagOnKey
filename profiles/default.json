@@ -1,18 +1,53 @@
 {
     "profileName": "default",
-    "layout":
-    [
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" },
-    { "name": "", "command": "" }
+    "layout": [
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        }
     ]
 }

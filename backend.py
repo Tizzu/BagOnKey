@@ -32,10 +32,28 @@ class DropLabel(QtWidgets.QGraphicsView):
         widget = e.source()
         print(f"Button label: {widget.data}")
         # add the shortcut to the current profile
-        current_profile[button_to_array_index.get(self.objectName())] = (widget.data, widget.shortcut)
+        shortcut = profiles.ProfileShortcut(widget.data, widget.shortcut)
+        current_profile.layout[button_to_array_index.get(self.objectName())] = shortcut
         print(f"Current profile: {current_profile}")
+        save_profile()
         # update the button text
         e.accept()
+        
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.RightButton:
+            self.show_context_menu(event)
+
+    def show_context_menu(self, event):
+        context_menu = QtWidgets.QMenu(self)
+        action1 = context_menu.addAction("Clear")
+
+        action = context_menu.exec(self.mapToGlobal(event.position().toPoint()))
+        if action == action1:
+            current_profile.layout[button_to_array_index.get(self.objectName())] = profiles.ProfileShortcut("", "")
+            save_profile()
+
+def save_profile():
+    profiles.save_profile(current_profile, f'profiles/{current_profile.profile_name}.json')   
 
 class CustomUiLoader(QUiLoader):
     def createWidget(self, className, parent=None, name=''):
@@ -53,8 +71,7 @@ dialog.setWindowTitle("BagOnKey")
 dialog.setWindowIcon(QtGui.QIcon("assets/icon.png"))
 dialog.show()
 
-current_profile = [("", "")] * 12
-# current_profile = profiles.load_profile('profiles/default.json') # Load the default profile
+current_profile = profiles.load_profile('profiles/default.json') # Load the default profile
 
 key_to_button = {
     'f13': dialog.button1,
@@ -133,6 +150,8 @@ def get_foreground_process_name():
         return process.name()
     except psutil.Error:
         return "Unknown"
+    except ValueError:
+        return "Unknown"
 
 last_process = None
 
@@ -149,7 +168,7 @@ def on_button_click(event):
     button = key_to_button.get(event.name)
     process_name = get_foreground_process_name()
     logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
-    command = current_profile[key_to_array_index.get(event.name)][1]
+    command = current_profile.layout[key_to_array_index.get(event.name)].command
     if button:
             button.setStyleSheet("border: 3px solid red;")
     if (command != ""):
