@@ -162,3 +162,7 @@ cython_debug/
 
 # Visual Studio Code
 .vscode/
+
+# Ignore every JSON file in profiles except default.json
+profiles/*.json
+!profiles/default.json

@@ -621,7 +621,7 @@
      <set>Qt::NoTextInteraction</set>
     </property>
    </widget>
-   <widget class="QToolButton" name="processSelectButton">
+   <widget class="QPushButton" name="processSelectButton">
     <property name="geometry">
      <rect>
       <x>20</x>

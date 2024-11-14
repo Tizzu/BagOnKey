@@ -10,7 +10,7 @@ import sys, os
 from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtUiTools import QUiLoader
 
-import shortcut, profiles
+import shortcut, profiles, settings
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
@@ -82,6 +82,7 @@ dialog = loader.load("resources/interface.ui", None)
 dialog.setWindowTitle("BagOnKey")
 dialog.setWindowIcon(QtGui.QIcon("assets/icon.png"))
 dialog.show()
+settings.load_settings()
 
 profiles_list = dialog.profileList
 profiles_list_widget = QtWidgets.QWidget()
@@ -229,6 +230,9 @@ def clear_current_notification():
 def load_profile(profile_name):
     profile = profiles.load_profile(f'profiles/{profile_name}.json')
     show_profile_notification(profile_name)  # Ensure this line is present
+    if profile_name != settings.last_selected_profile:
+        settings.last_selected_profile = profile_name
+        settings.save_settings()
     # for each dialog button, set the text to the corresponding shortcut name
     for i, button in enumerate(key_to_button.values()):
         if profile.layout[i].name == "":
@@ -244,7 +248,7 @@ def load_profile(profile_name):
     return profile
 
 # Initial profile load
-current_profile = load_profile("default")
+current_profile = load_profile(settings.last_selected_profile)
 
 def create_icon():
     image = Image.open("assets/icon.png")
@@ -486,6 +490,38 @@ create_profile_menu.triggered.connect(lambda: create_profile())
 
 rename_profile_menu = dialog.actionRename
 rename_profile_menu.triggered.connect(lambda: rename_profile(current_profile.profile_name))
+
+def extractProcessName(file_path):
+    return os.path.basename(file_path)
+
+def showFileDialog(self):
+    if current_profile.profile_name == "default":
+        no_dialog = QtWidgets.QDialog()
+        no_dialog.setWindowTitle("Rename Profile")
+        no_dialog.setWindowIcon(QtGui.QIcon("assets/icon.png"))
+        no_dialog.resize(200, 100)
+        layout = QtWidgets.QVBoxLayout()
+        no_dialog.setLayout(layout)
+        label = QtWidgets.QLabel("You cannot change the process of the default profile")
+        layout.addWidget(label)
+        yes_button_sad = QtWidgets.QPushButton("Ok :(")
+        yes_button_sad.clicked.connect(no_dialog.reject)
+        layout.addWidget(yes_button_sad)
+        no_dialog.exec()
+        # show a dialog saying you can't change the process
+        return
+    options = QtWidgets.QFileDialog.Option(QtWidgets.QFileDialog.Option.DontUseNativeDialog)
+    file_filter = "Executable Files (*.exe)"
+    file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", file_filter, options=options)
+    if file_name:
+        process_name = extractProcessName(file_name)
+        # this process name will be the one to be used for tracking the process when the foreground process changes
+        current_profile.process_name = process_name
+        save_profile()
+
+
+process_changer = dialog.processSelectButton
+process_changer.clicked.connect(lambda: showFileDialog(dialog))
 
 dialog.show()
 # Show a notification
