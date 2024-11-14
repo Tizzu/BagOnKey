@@ -6,12 +6,12 @@
             "command": "volume down"
         },
         {
-            "name": "Volume Up",
-            "command": "volume up"
+            "name": "Next",
+            "command": "next track"
         },
         {
-            "name": "",
-            "command": ""
+            "name": "Mute",
+            "command": "volume mute"
         },
         {
             "name": "",

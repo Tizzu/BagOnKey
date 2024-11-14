@@ -12,6 +12,8 @@ from PySide6.QtUiTools import QUiLoader
 
 import shortcut, profiles
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+
 class DropLabel(QtWidgets.QPushButton):
     def __init__(self, *args, **kwargs):
         super(DropLabel, self).__init__(*args, **kwargs)
@@ -66,7 +68,7 @@ def save_profile():
 
 class CustomUiLoader(QUiLoader):
     def createWidget(self, className, parent=None, name=''):
-        if className == 'DropLabel':
+        if (className == 'DropLabel'):
             widget = DropLabel(parent)
             widget.setObjectName(name)
             return widget
@@ -88,7 +90,6 @@ profiles_list_content = QtWidgets.QVBoxLayout()
 profiles_list_widget.setLayout(profiles_list_content)
 profiles_list.setWidget(profiles_list_widget)
 
-
 # for each profile in the profiles folder, add it to the list
 
 def reload_buttons():
@@ -97,7 +98,10 @@ def reload_buttons():
         profiles_list_content.itemAt(i).widget().deleteLater()
     for profile in os.listdir("profiles"):
         profile_button = QtWidgets.QPushButton(profile.split(".")[0])
-        profile_button.setStyleSheet("border: 1px solid black; padding: 5px;")
+        if (profile.split(".")[0] == current_profile.profile_name):
+            profile_button.setStyleSheet("border: 3px solid green; padding: 5px;")
+        else:
+            profile_button.setStyleSheet("border: 1px solid black; padding: 5px;")
         def on_profile_click(profile_name):
             global current_profile
             current_profile = load_profile(profile_name)
@@ -135,8 +139,96 @@ button_to_key = {
     "button12": 'f24',
 }
 
+class PopupNotification(QtWidgets.QWidget):
+    def __init__(self, profile_name, parent=None):
+        super().__init__(parent)
+        self.setWindowFlags(
+            QtCore.Qt.WindowStaysOnTopHint | 
+            QtCore.Qt.FramelessWindowHint | 
+            QtCore.Qt.Tool
+        )
+        self.setAttribute(QtCore.Qt.WA_ShowWithoutActivating)
+
+        global dial_position
+        layout = QtWidgets.QHBoxLayout(self)
+
+        # Add icon to the popup
+        icon_label = QtWidgets.QLabel()
+        icon = QtGui.QIcon("assets/icon.png")  # Replace with the path to your icon
+        icon_pixmap = icon.pixmap(32, 32)  # Adjust the size as needed
+        icon_label.setPixmap(icon_pixmap)
+        layout.addWidget(icon_label)
+
+        label = QtWidgets.QLabel(f"Profile: {profile_name}")
+        layout.addWidget(label)
+
+        self.setStyleSheet("""
+            QWidget {
+                background-color: rgba(30, 30, 30, 255);  /* Increase transparency by lowering alpha value */
+                color: white;
+                border-radius: 10px;
+            }
+            QLabel {
+                font-size: 16px;  /* Increase text size */
+            }
+        """)
+
+        self.adjustSize()
+        self.move_to_corner()
+
+    def move_to_corner(self):
+        # Get mouse cursor position
+        cursor_pos = QtGui.QCursor.pos()
+        # Identify the screen at cursor position
+        screen = QtGui.QGuiApplication.screenAt(cursor_pos)
+        if screen:
+            # Get available geometry of the screen
+            screen_geometry = screen.availableGeometry()
+            x = screen_geometry.x() + (screen_geometry.width() - self.width()) // 2
+            y = screen_geometry.y() + screen_geometry.height() - self.height() - 50
+            self.move(x, y)
+        else:
+            # Fallback to primary screen if no screen is found
+            screen_geometry = QtGui.QGuiApplication.primaryScreen().availableGeometry()
+            x = (screen_geometry.width() - self.width()) // 2
+            y = screen_geometry.height() - self.height() - 50
+            self.move(x, y)
+
+    def show_notification(self, duration=2000):
+        self.setWindowFlags(
+            QtCore.Qt.WindowStaysOnTopHint | 
+            QtCore.Qt.FramelessWindowHint |
+            QtCore.Qt.Tool
+        )
+        self.setAttribute(QtCore.Qt.WA_ShowWithoutActivating)
+        self.activateWindow()
+        self.raise_()
+        self.show()
+        QtCore.QTimer.singleShot(duration, self.close)
+
+
+
+# Add a global variable to store the current active notification
+current_notification = None
+
+def show_profile_notification(profile_name):
+    global current_notification
+    # Close the existing notification if it exists
+    if current_notification:
+        current_notification.close()
+    
+    # Create the PopupNotification instance
+    current_notification = PopupNotification(profile_name)
+    # Show the notification
+    current_notification.show_notification()
+
+def clear_current_notification():
+    global current_notification
+    current_notification = None
+
 def load_profile(profile_name):
     profile = profiles.load_profile(f'profiles/{profile_name}.json')
+    show_profile_notification(profile_name)  # Ensure this line is present
     # for each dialog button, set the text to the corresponding shortcut name
     for i, button in enumerate(key_to_button.values()):
         if profile.layout[i].name == "":
@@ -151,9 +243,8 @@ def load_profile(profile_name):
             profiles_list_content.itemAt(i).widget().setStyleSheet("border: 1px solid black; padding: 5px;")
     return profile
 
+# Initial profile load
 current_profile = load_profile("default")
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 def create_icon():
     image = Image.open("assets/icon.png")
@@ -377,7 +468,6 @@ for i in shortcut.shortcuts:
     # log the function of the button
     button.clicked.connect(lambda _, desc=i.description: refresh_description(desc))
     content_layout.addWidget(button)
-    
 
 content_widget.setLayout(content_layout)
 scroll_area.setWidget(content_widget)
@@ -398,6 +488,8 @@ rename_profile_menu = dialog.actionRename
 rename_profile_menu.triggered.connect(lambda: rename_profile(current_profile.profile_name))
 
 dialog.show()
+# Show a notification
+#tray_icon.showMessage("Notification Title", "This is the notification message.", QtWidgets.QSystemTrayIcon.Information)
 reload_buttons()
 
 # Set up keyboard event handlers
