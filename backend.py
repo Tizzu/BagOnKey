@@ -93,7 +93,14 @@ profiles_list_content = QtWidgets.QVBoxLayout()
 profiles_list_widget.setLayout(profiles_list_content)
 profiles_list.setWidget(profiles_list_widget)
 
+process_changer = dialog.processSelectButton
+default_checkbox = dialog.defaultProfileCheck
+
+
 # for each profile in the profiles folder, add it to the list
+
+def process_label_change(process_name):
+    process_changer.setText(process_name + "\n(Click to change)")
 
 def reload_buttons():
     # clean the layout
@@ -262,10 +269,26 @@ def load_profile(profile_name):
             profiles_list_content.itemAt(i).widget().setStyleSheet("border: 3px solid green; padding: 5px;")
         else:
             profiles_list_content.itemAt(i).widget().setStyleSheet("border: 1px solid black; padding: 5px;")
+    # find the process name for the profile --> tracked_processes (profile_name, process_name)
+    for profile_name, tracked_process in settings.tracked_processes:
+        if profile_name == name:
+            process_label_change(tracked_process)
+            break
+    default_checkbox.setChecked(name == settings.default_profile)
     return profile
 
 # Initial profile load
 current_profile = load_profile(settings.last_selected_profile)
+
+def on_checkbox_change():
+    if default_checkbox.isChecked():
+        settings.default_profile = current_profile.profile_name
+        settings.save_settings()
+    else:
+        settings.default_profile = ""
+        settings.save_settings()
+
+default_checkbox.clicked.connect(on_checkbox_change)
 
 def create_icon():
     image = Image.open("assets/icon.png")
@@ -293,8 +316,8 @@ def on_process_change(process_name):
             current_profile = load_profile(profile_name)
             found = True
             break
-    if not found:
-        current_profile = load_profile("default")
+    if not found and settings.default_profile != "":
+        current_profile = load_profile(settings.default_profile)
 
 class ProcessMonitor(QObject):
     process_changed = Signal(str)
@@ -543,10 +566,12 @@ create_profile_menu.triggered.connect(lambda: create_profile())
 rename_profile_menu = dialog.actionRename
 rename_profile_menu.triggered.connect(lambda: rename_profile(current_profile.profile_name))
 
+
 def extractProcessName(file_path):
     return os.path.basename(file_path)
 
 def showFileDialog(self):
+    global process_changer
     if current_profile.profile_name == "default":
         no_dialog = QtWidgets.QDialog()
         no_dialog.setWindowTitle("Rename Profile")
@@ -570,11 +595,20 @@ def showFileDialog(self):
         # this process name will be the one to be used for tracking the process when the foreground process changes
         settings.tracked_processes = [x for x in settings.tracked_processes if x[0] != current_profile.profile_name]
         settings.tracked_processes.append([current_profile.profile_name, process_name])
+        process_label_change(process_name)
         settings.save_tracked_processes()
 
-
-process_changer = dialog.processSelectButton
 process_changer.clicked.connect(lambda: showFileDialog(dialog))
+process_cleaner = dialog.clearSelection
+
+def clearProcessName():
+    process_label_change("None")
+    settings.tracked_processes = [x for x in settings.tracked_processes if x[0] != current_profile.profile_name]
+    settings.tracked_processes.append([current_profile.profile_name, "None"])
+    settings.save_tracked_processes()
+
+process_cleaner.clicked.connect(lambda: clearProcessName())
+
 
 dialog.show()
 reload_buttons()

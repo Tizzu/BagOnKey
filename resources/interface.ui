@@ -626,12 +626,13 @@
      <rect>
       <x>20</x>
       <y>270</y>
-      <width>151</width>
+      <width>149</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
-     <string>None (click to select)</string>
+     <string>None 
+(click to change)</string>
     </property>
    </widget>
    <widget class="QScrollArea" name="ideasList">
