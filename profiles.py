@@ -18,6 +18,8 @@ class ProfileShortcut:
         }
 
 def load_profile(file_path):
+    if not os.path.exists(file_path):
+        return None
     with open(file_path, 'r') as file:
         data = json.load(file)
         profile_name = data['profileName']

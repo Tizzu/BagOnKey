@@ -17,16 +17,15 @@ def save_settings():
     with open("resources/settings.json", 'w') as file:
         json.dump(data, file, indent=4)
 
-#TODO: Implement tracked_processes as a list of pairs (profile_name, process_name)
 def load_tracked_processes():
     global tracked_processes
     with open("resources/tracked_processes.json", 'r') as file:
         data = json.load(file)
         tracked_processes = data['tracked_processes']
 
-def save_settings():
+def save_tracked_processes():
     data = {
         'tracked_processes': tracked_processes
     }
-    with open("resources/settings.json", 'w') as file:
+    with open("resources/tracked_processes.json", 'w') as file:
         json.dump(data, file, indent=4)

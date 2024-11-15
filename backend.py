@@ -9,6 +9,7 @@ import time
 import sys, os
 from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtUiTools import QUiLoader
+from PySide6.QtCore import Signal, QObject
 
 import shortcut, profiles, settings
 
@@ -83,6 +84,7 @@ dialog.setWindowTitle("BagOnKey")
 dialog.setWindowIcon(QtGui.QIcon("assets/icon.png"))
 dialog.show()
 settings.load_settings()
+settings.load_tracked_processes()
 
 profiles_list = dialog.profileList
 profiles_list_widget = QtWidgets.QWidget()
@@ -239,11 +241,15 @@ def clear_current_notification():
     current_notification = None
 
 def load_profile(profile_name):
-    profile = profiles.load_profile(f'profiles/{profile_name}.json')
-    show_profile_notification(profile_name)  # Ensure this line is present
-    if profile_name != settings.last_selected_profile:
-        settings.last_selected_profile = profile_name
+    name = profile_name
+    profile = profiles.load_profile(f'profiles/{name}.json')
+    if profile is None:
+        profile = profiles.load_profile("profiles/default.json") 
+        name = "default"
+    if name != settings.last_selected_profile:
+        settings.last_selected_profile = name
         settings.save_settings()
+        show_profile_notification(name)  
     # for each dialog button, set the text to the corresponding shortcut name
     for i, button in enumerate(key_to_button.values()):
         if profile.layout[i].name == "":
@@ -252,7 +258,7 @@ def load_profile(profile_name):
             button.setText(profile.layout[i].name)
     # get the profiles list and make a green border to the selected profile, and a black border to the others
     for i in range(profiles_list_content.count()):
-        if profiles_list_content.itemAt(i).widget().text() == profile_name:
+        if profiles_list_content.itemAt(i).widget().text() == name:
             profiles_list_content.itemAt(i).widget().setStyleSheet("border: 3px solid green; padding: 5px;")
         else:
             profiles_list_content.itemAt(i).widget().setStyleSheet("border: 1px solid black; padding: 5px;")
@@ -279,14 +285,38 @@ def get_foreground_process_name():
 
 last_process = None
 
-def monitor_foreground_process_thread():
-    global last_process
-    while True:
-        process_name = get_foreground_process_name()
-        if process_name != last_process:
-            logging.info(f'Foreground process changed to {process_name}')
-            last_process = process_name
-        time.sleep(0.5)  # Adjust the interval as needed
+def on_process_change(process_name):
+    global current_profile
+    found = False
+    for profile_name, tracked_process in settings.tracked_processes:
+        if tracked_process == process_name:
+            current_profile = load_profile(profile_name)
+            found = True
+            break
+    if not found:
+        current_profile = load_profile("default")
+
+class ProcessMonitor(QObject):
+    process_changed = Signal(str)
+
+    def __init__(self):
+        super().__init__()
+        self.last_process = None
+
+    def monitor_process(self):
+        while True:
+            process_name = get_foreground_process_name()
+            if process_name != self.last_process:
+                logging.info(f'Foreground process changed to {process_name}')
+                self.last_process = process_name
+                self.process_changed.emit(process_name)
+            time.sleep(0.5)  # Adjust the interval as needed
+
+process_monitor = ProcessMonitor()
+process_monitor.process_changed.connect(on_process_change)
+
+monitor_thread = threading.Thread(target=process_monitor.monitor_process, daemon=True)
+monitor_thread.start()
 
 def on_button_click(event):
     isShortcut = False
@@ -302,7 +332,6 @@ def on_button_click(event):
     else:
         logging.info(f'Shortcut {event} pressed in process {process_name}')
     button_list = list(button_to_key.values())
-    # command = current_profile.layout[button_list.index(event.name)].command
     if not isShortcut:
         command = current_profile.layout[button_list.index(event.name)].command
     else:
@@ -312,15 +341,6 @@ def on_button_click(event):
     if (command != ""):
         keyboard.press_and_release(command)
 
-
-def on_button_release(event):
-    if isinstance(event, str):
-        key_tuple = (event, 'shortcut')
-    else:
-        key_tuple = (event.name, 'key')
-    button = key_to_button.get(key_tuple)
-    if button:
-        button.setStyleSheet("border: 3px solid black;")
 
 def on_dialog_close(event):
     dialog.hide()
@@ -355,9 +375,6 @@ def refresh_description(desc):
     for i in reversed(range(description_layout.count())):
         description_layout.itemAt(i).widget().deleteLater()
     description_layout.addWidget(QtWidgets.QLabel(desc))
-
-# Start the background thread
-threading.Thread(target=monitor_foreground_process_thread, daemon=True).start()
 
 class DragButton(QtWidgets.QPushButton):
     def __init__(self, label, shortcut, *args, **kwargs):
@@ -407,6 +424,8 @@ def delete_dialog(profile_name):
         global current_profile
         profiles.delete_profile(f'profiles/{profile_name}.json')
         current_profile = load_profile("default")
+        settings.tracked_processes = [x for x in settings.tracked_processes if x[0] != profile_name]
+        settings.save_tracked_processes()
         reload_buttons()
         delete_dialog.accept()
     
@@ -414,6 +433,8 @@ def delete_dialog(profile_name):
         delete_dialog.reject()
     
     yes_button.clicked.connect(on_yes_clicked)
+    #if the enter key is pressed, the yes button is clicked
+    yes_button.setAutoDefault(True)
     no_button.clicked.connect(on_no_clicked)
     
     delete_dialog.exec()
@@ -439,10 +460,13 @@ def create_profile():
         profile_name = input_field.text()
         profiles.create_profile(f'profiles/{profile_name}.json', profile_name)
         current_profile = load_profile(profile_name)
+        settings.tracked_processes.append([profile_name, "None"])
+        settings.save_tracked_processes()
         reload_buttons()
         create_dialog.accept()
     
     create_button.clicked.connect(on_create_clicked)
+    create_button.setAutoDefault(True)
     cancel_button.clicked.connect(create_dialog.reject)
     
     create_dialog.exec()
@@ -478,15 +502,18 @@ def rename_profile(profile_name):
         new_profile_name = input_field.text()
         profiles.rename_profile(new_profile_name, current_profile, f'profiles/{profile_name}.json', f'profiles/{new_profile_name}.json')
         current_profile = load_profile(new_profile_name)
+        settings.tracked_processes = [x for x in settings.tracked_processes if x[0] != profile_name]
+        settings.tracked_processes.append([new_profile_name, "None"])
+        settings.save_tracked_processes()
         reload_buttons()
         rename_dialog.accept()
     
     rename_button.clicked.connect(on_rename_clicked)
+    rename_button.setAutoDefault(True)
     cancel_button.clicked.connect(rename_dialog.reject)
     
     rename_dialog.exec()
 
-# Show the dialog and start the application event loop
 scroll_area = dialog.ideasList
 content_widget = QtWidgets.QWidget()
 content_layout = QtWidgets.QVBoxLayout()
@@ -497,7 +524,6 @@ description_layout = QtWidgets.QVBoxLayout()
 
 for i in shortcut.shortcuts:
     button = DragButton(i.name, i.function)
-    # log the function of the button
     button.clicked.connect(lambda _, desc=i.description: refresh_description(desc))
     content_layout.addWidget(button)
 
@@ -506,9 +532,7 @@ scroll_area.setWidget(content_widget)
 description_widget.setLayout(description_layout)
 description_scroll_area.setWidget(description_widget)
 
-# Get the "actionExit" menu item from the menu bar
 exit_menu_bar = dialog.actionExit
-# Connect the "triggered" signal to the "close" slot, with PySide6 syntax
 exit_menu_bar.triggered.connect(app.quit)
 delete_profile_menu = dialog.actionDelete
 delete_profile_menu.triggered.connect(lambda: delete_dialog(current_profile.profile_name))
@@ -544,27 +568,22 @@ def showFileDialog(self):
     if file_name:
         process_name = extractProcessName(file_name)
         # this process name will be the one to be used for tracking the process when the foreground process changes
-        current_profile.tracked_process = process_name
-        save_profile()
+        settings.tracked_processes = [x for x in settings.tracked_processes if x[0] != current_profile.profile_name]
+        settings.tracked_processes.append([current_profile.profile_name, process_name])
+        settings.save_tracked_processes()
 
 
 process_changer = dialog.processSelectButton
 process_changer.clicked.connect(lambda: showFileDialog(dialog))
 
 dialog.show()
-# Show a notification
-#tray_icon.showMessage("Notification Title", "This is the notification message.", QtWidgets.QSystemTrayIcon.Information)
 reload_buttons()
 
 # Set up keyboard event handlers
 for key, type in key_to_button.keys():
     if type == 'key':
         keyboard.on_press_key(key, on_button_click)
-        keyboard.on_release_key(key, on_button_release)
     else:
         keyboard.add_hotkey(key, on_button_click, args=(key,))
-        # the library has a bug where it doesn't trigger the on_button_release function when the shortcut is released
-        # it's a known issue of the keyboard library, it should be fixed in the future...the important part is that the on_button_click function works
-        keyboard.add_hotkey(key, on_button_release, args=(key,), trigger_on_release=True)
 
 app.exec()
