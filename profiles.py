@@ -2,9 +2,8 @@ import json
 import os
 
 class Profile:
-    def __init__(self, profile_name, tracked_process, layout):
+    def __init__(self, profile_name, layout):
         self.profile_name = profile_name
-        self.tracked_process = tracked_process
         self.layout = layout
 
 class ProfileShortcut:
@@ -22,15 +21,13 @@ def load_profile(file_path):
     with open(file_path, 'r') as file:
         data = json.load(file)
         profile_name = data['profileName']
-        tracked_process = data.get('tracked_process')
         layout = [ProfileShortcut(**item) for item in data['layout']]
-        profile = Profile(profile_name, tracked_process, layout)
+        profile = Profile(profile_name, layout)
     return profile
 
 def save_profile(profile, file_path):
     data = {
         'profileName': profile.profile_name,
-        'tracked_process': profile.tracked_process,
         'layout': [item.to_dict() for item in profile.layout]
     }
     with open(file_path, 'w') as file:
@@ -53,7 +50,6 @@ def rename_profile(new_name, profile, old_file_path, new_file_path):
 def create_profile(file_path, profile_name):
     data = {
         'profileName': profile_name,
-        'tracked_process': "",
         'layout': [{
             "name": "",
             "command": ""

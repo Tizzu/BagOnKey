@@ -110,19 +110,24 @@ def reload_buttons():
         profiles_list_content.addWidget(profile_button)
 
 key_to_button = {
-    'f13': dialog.button1,
-    'f14': dialog.button2,
-    'f15': dialog.button3,
-    'f16': dialog.button4,
-    'f17': dialog.button5,
-    'f18': dialog.button6,
-    'f19': dialog.button7,
-    'f20': dialog.button8,
-    'f21': dialog.button9,
-    'f22': dialog.button10,
-    'f23': dialog.button11,
-    'f24': dialog.button12,
-    # Add more keys once the knobs are defined
+    ('f13', 'key'): dialog.button1,
+    ('f14', 'key'): dialog.button2,
+    ('f15', 'key'): dialog.button3,
+    ('f16', 'key'): dialog.button4,
+    ('f17', 'key'): dialog.button5,
+    ('f18', 'key'): dialog.button6,
+    ('f19', 'key'): dialog.button7,
+    ('f20', 'key'): dialog.button8,
+    ('f21', 'key'): dialog.button9,
+    ('f22', 'key'): dialog.button10,
+    ('f23', 'key'): dialog.button11,
+    ('f24', 'key'): dialog.button12,
+    ('alt+shift+1', 'shortcut'): dialog.knob1,
+    ('alt+shift+2', 'shortcut'): dialog.knob2,
+    ('alt+shift+3', 'shortcut'): dialog.knob3,
+    ('alt+shift+4', 'shortcut'): dialog.knob4,
+    ('alt+shift+5', 'shortcut'): dialog.knob5,
+    ('alt+shift+6', 'shortcut'): dialog.knob6
 }
 
 button_to_key = {
@@ -138,6 +143,12 @@ button_to_key = {
     "button10": 'f22',
     "button11": 'f23',
     "button12": 'f24',
+    "knob1": 'alt+shift+1',
+    "knob2": 'alt+shift+2',
+    "knob3": 'alt+shift+3',
+    "knob4": 'alt+shift+4',
+    "knob5": 'alt+shift+5',
+    "knob6": 'alt+shift+6'
 }
 
 class PopupNotification(QtWidgets.QWidget):
@@ -278,11 +289,24 @@ def monitor_foreground_process_thread():
         time.sleep(0.5)  # Adjust the interval as needed
 
 def on_button_click(event):
-    button = key_to_button.get(event.name)
+    isShortcut = False
+    if isinstance(event, str):
+        key_tuple = (event, 'shortcut')
+        isShortcut = True
+    else:
+        key_tuple = (event.name, 'key')
+    button = key_to_button.get(key_tuple)
     process_name = get_foreground_process_name()
-    logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
+    if not isShortcut:
+        logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
+    else:
+        logging.info(f'Shortcut {event} pressed in process {process_name}')
     button_list = list(button_to_key.values())
-    command = current_profile.layout[button_list.index(event.name)].command
+    # command = current_profile.layout[button_list.index(event.name)].command
+    if not isShortcut:
+        command = current_profile.layout[button_list.index(event.name)].command
+    else:
+        command = current_profile.layout[button_list.index(event)].command
     if button:
             button.setStyleSheet("border: 3px solid red;")
     if (command != ""):
@@ -290,7 +314,11 @@ def on_button_click(event):
 
 
 def on_button_release(event):
-    button = key_to_button.get(event.name)
+    if isinstance(event, str):
+        key_tuple = (event, 'shortcut')
+    else:
+        key_tuple = (event.name, 'key')
+    button = key_to_button.get(key_tuple)
     if button:
         button.setStyleSheet("border: 3px solid black;")
 
@@ -516,7 +544,7 @@ def showFileDialog(self):
     if file_name:
         process_name = extractProcessName(file_name)
         # this process name will be the one to be used for tracking the process when the foreground process changes
-        current_profile.process_name = process_name
+        current_profile.tracked_process = process_name
         save_profile()
 
 
@@ -529,8 +557,14 @@ dialog.show()
 reload_buttons()
 
 # Set up keyboard event handlers
-for key in key_to_button.keys():
-    keyboard.on_press_key(key, on_button_click)
-    keyboard.on_release_key(key, on_button_release)
+for key, type in key_to_button.keys():
+    if type == 'key':
+        keyboard.on_press_key(key, on_button_click)
+        keyboard.on_release_key(key, on_button_release)
+    else:
+        keyboard.add_hotkey(key, on_button_click, args=(key,))
+        # the library has a bug where it doesn't trigger the on_button_release function when the shortcut is released
+        # it's a known issue of the keyboard library, it should be fixed in the future...the important part is that the on_button_click function works
+        keyboard.add_hotkey(key, on_button_release, args=(key,), trigger_on_release=True)
 
 app.exec()
