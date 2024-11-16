@@ -96,6 +96,47 @@ profiles_list.setWidget(profiles_list_widget)
 process_changer = dialog.processSelectButton
 default_checkbox = dialog.defaultProfileCheck
 
+threeKeys = dialog.action3_keys_1_knob
+twelveKeys = dialog.action12_keys_2_knobs
+
+def change_layout(setting, save=False):
+    if setting == "": # still not set
+        setting = "classic"
+    if setting == "mini":
+        dialog.button4.hide()
+        dialog.button5.hide()
+        dialog.button6.hide()
+        dialog.button7.hide()
+        dialog.button8.hide()
+        dialog.button9.hide()
+        dialog.button10.hide()
+        dialog.button11.hide()
+        dialog.button12.hide()
+        dialog.dial2.hide()
+        dialog.knob4.hide()
+        dialog.knob5.hide()
+        dialog.knob6.hide()
+    elif setting == "classic":
+        dialog.button4.show()
+        dialog.button5.show()
+        dialog.button6.show()
+        dialog.button7.show()
+        dialog.button8.show()
+        dialog.button9.show()
+        dialog.button10.show()
+        dialog.button11.show()
+        dialog.button12.show()
+        dialog.dial2.show()
+        dialog.knob4.show()
+        dialog.knob5.show()
+        dialog.knob6.show()
+    if save:
+        settings.selected_layout = setting
+        settings.save_settings()
+
+threeKeys.triggered.connect(lambda: change_layout("mini", True))
+twelveKeys.triggered.connect(lambda: change_layout("classic", True))
+change_layout(settings.selected_layout)
 
 # for each profile in the profiles folder, add it to the list
 
@@ -341,26 +382,21 @@ process_monitor.process_changed.connect(on_process_change)
 monitor_thread = threading.Thread(target=process_monitor.monitor_process, daemon=True)
 monitor_thread.start()
 
+isPressed = False
+
 def on_button_click(event):
     isShortcut = False
+    button_list = list(button_to_key.values())
     if isinstance(event, str):
-        key_tuple = (event, 'shortcut')
         isShortcut = True
-    else:
-        key_tuple = (event.name, 'key')
-    button = key_to_button.get(key_tuple)
     process_name = get_foreground_process_name()
     if not isShortcut:
         logging.info(f'Key {event.name.upper()} pressed in process {process_name}')
-    else:
-        logging.info(f'Shortcut {event} pressed in process {process_name}')
-    button_list = list(button_to_key.values())
-    if not isShortcut:
         command = current_profile.layout[button_list.index(event.name)].command
     else:
+        logging.info(f'Shortcut {event} pressed in process {process_name}')
         command = current_profile.layout[button_list.index(event)].command
-    if button:
-            button.setStyleSheet("border: 3px solid red;")
+    
     if (command != ""):
         keyboard.press_and_release(command)
 
@@ -616,8 +652,8 @@ reload_buttons()
 # Set up keyboard event handlers
 for key, type in key_to_button.keys():
     if type == 'key':
-        keyboard.on_press_key(key, on_button_click)
+        keyboard.on_release_key(key, on_button_click, suppress=True)
     else:
-        keyboard.add_hotkey(key, on_button_click, args=(key,))
+        keyboard.add_hotkey(key, on_button_click, args=(key,), suppress=True)
 
 app.exec()

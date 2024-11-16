@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>965</width>
-    <height>728</height>
+    <height>791</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -32,7 +32,7 @@
       <x>190</x>
       <y>30</y>
       <width>761</width>
-      <height>409</height>
+      <height>461</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -371,6 +371,18 @@
          <property name="enabled">
           <bool>false</bool>
          </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>330</width>
+           <height>100</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <bold>false</bold>
@@ -470,6 +482,18 @@
         <widget class="QDial" name="dial2">
          <property name="enabled">
           <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>330</width>
+           <height>100</height>
+          </size>
          </property>
          <property name="minimum">
           <number>50</number>
@@ -590,7 +614,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>180</y>
+      <y>220</y>
       <width>151</width>
       <height>16</height>
      </rect>
@@ -603,7 +627,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>200</y>
+      <y>240</y>
       <width>151</width>
       <height>61</height>
      </rect>
@@ -625,7 +649,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>270</y>
+      <y>310</y>
       <width>149</width>
       <height>51</height>
      </rect>
@@ -639,7 +663,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>450</y>
+      <y>490</y>
       <width>721</width>
       <height>241</height>
      </rect>
@@ -662,7 +686,7 @@
     <property name="geometry">
      <rect>
       <x>740</x>
-      <y>450</y>
+      <y>490</y>
       <width>201</width>
       <height>241</height>
      </rect>
@@ -687,7 +711,7 @@
       <x>30</x>
       <y>90</y>
       <width>131</width>
-      <height>80</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -699,7 +723,7 @@
        <x>0</x>
        <y>0</y>
        <width>129</width>
-       <height>78</height>
+       <height>119</height>
       </rect>
      </property>
     </widget>
@@ -708,7 +732,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>320</y>
+      <y>360</y>
       <width>151</width>
       <height>24</height>
      </rect>
@@ -727,7 +751,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>380</y>
+      <y>420</y>
       <width>151</width>
       <height>51</height>
      </rect>
@@ -773,8 +797,16 @@ profiles are available</string>
     </property>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuLayout">
+    <property name="title">
+     <string>Layout</string>
+    </property>
+    <addaction name="action3_keys_1_knob"/>
+    <addaction name="action12_keys_2_knobs"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuProfile"/>
+   <addaction name="menuLayout"/>
   </widget>
   <action name="actionAdd_new_profile">
    <property name="text">
@@ -821,6 +853,16 @@ profiles are available</string>
    </property>
    <property name="text">
     <string>Made with ❤️ by Tizzu</string>
+   </property>
+  </action>
+  <action name="action3_keys_1_knob">
+   <property name="text">
+    <string>3 keys + 1 knob</string>
+   </property>
+  </action>
+  <action name="action12_keys_2_knobs">
+   <property name="text">
+    <string>12 keys + 2 knobs</string>
    </property>
   </action>
  </widget>

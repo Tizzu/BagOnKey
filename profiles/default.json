@@ -2,20 +2,16 @@
     "profileName": "default",
     "layout": [
         {
-            "name": "Volume Down",
-            "command": "volume down"
+            "name": "Copy",
+            "command": "ctrl+c"
         },
         {
-            "name": "Next",
-            "command": "next track"
+            "name": "Cut",
+            "command": "ctrl+x"
         },
         {
-            "name": "Mute",
-            "command": "volume mute"
-        },
-        {
-            "name": "",
-            "command": ""
+            "name": "Paste",
+            "command": "ctrl+v"
         },
         {
             "name": "",
@@ -54,12 +50,16 @@
             "command": ""
         },
         {
-            "name": "",
-            "command": ""
+            "name": "Undo",
+            "command": "ctrl+z"
         },
         {
-            "name": "",
-            "command": ""
+            "name": "Save",
+            "command": "ctrl+s"
+        },
+        {
+            "name": "Redo",
+            "command": "ctrl+y"
         },
         {
             "name": "",
