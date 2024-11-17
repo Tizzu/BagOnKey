@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>965</width>
-    <height>791</height>
+    <width>957</width>
+    <height>728</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -32,7 +32,7 @@
       <x>190</x>
       <y>30</y>
       <width>761</width>
-      <height>461</height>
+      <height>481</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -68,7 +68,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -93,7 +93,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -118,7 +118,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -147,7 +147,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -172,7 +172,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -197,7 +197,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -226,7 +226,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -251,7 +251,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -276,7 +276,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -305,7 +305,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -330,7 +330,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -355,7 +355,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: 3px solid black;</string>
+          <string notr="true">border-radius: 17px; border: 2px solid black;</string>
          </property>
          <property name="text">
           <string>None</string>
@@ -419,7 +419,7 @@
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 3px solid black;</string>
+            <string notr="true">border-radius: 17px; border: 2px solid black;</string>
            </property>
            <property name="text">
             <string>None</string>
@@ -444,7 +444,7 @@
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 3px solid black;</string>
+            <string notr="true">border-radius: 17px; border: 2px solid black;</string>
            </property>
            <property name="text">
             <string>None</string>
@@ -469,7 +469,7 @@
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 3px solid black;</string>
+            <string notr="true">border-radius: 17px; border: 2px solid black;</string>
            </property>
            <property name="text">
             <string>None</string>
@@ -523,7 +523,7 @@
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 3px solid black;</string>
+            <string notr="true">border-radius: 17px; border: 2px solid black;</string>
            </property>
            <property name="text">
             <string>None</string>
@@ -548,7 +548,7 @@
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 3px solid black;</string>
+            <string notr="true">border-radius: 17px; border: 2px solid black;</string>
            </property>
            <property name="text">
             <string>None</string>
@@ -573,7 +573,7 @@
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 3px solid black;</string>
+            <string notr="true">border-radius: 17px; border: 2px solid black;</string>
            </property>
            <property name="text">
             <string>None</string>
@@ -654,6 +654,10 @@
       <height>51</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 17px; 
+border: 2px solid black;</string>
+    </property>
     <property name="text">
      <string>None 
 (click to change)</string>
@@ -663,9 +667,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>490</y>
+      <y>520</y>
       <width>721</width>
-      <height>241</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -677,7 +681,7 @@
        <x>0</x>
        <y>0</y>
        <width>719</width>
-       <height>239</height>
+       <height>159</height>
       </rect>
      </property>
     </widget>
@@ -686,9 +690,9 @@
     <property name="geometry">
      <rect>
       <x>740</x>
-      <y>490</y>
+      <y>520</y>
       <width>201</width>
-      <height>241</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -700,7 +704,7 @@
        <x>0</x>
        <y>0</y>
        <width>199</width>
-       <height>239</height>
+       <height>159</height>
       </rect>
      </property>
     </widget>
@@ -732,9 +736,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>360</y>
+      <y>370</y>
       <width>151</width>
-      <height>24</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="maximumSize">
@@ -742,6 +746,10 @@
       <width>16777215</width>
       <height>16777215</height>
      </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 17px; 
+border: 2px solid black;</string>
     </property>
     <property name="text">
      <string>Clear Selection</string>
@@ -751,7 +759,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>420</y>
+      <y>450</y>
       <width>151</width>
       <height>51</height>
      </rect>
@@ -773,7 +781,7 @@ profiles are available</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>965</width>
+     <width>957</width>
      <height>22</height>
     </rect>
    </property>
@@ -804,9 +812,17 @@ profiles are available</string>
     <addaction name="action3_keys_1_knob"/>
     <addaction name="action12_keys_2_knobs"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionUse_this_tool_with_your_keyboard"/>
+    <addaction name="actionAbout_BagOnKey"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuProfile"/>
    <addaction name="menuLayout"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionAdd_new_profile">
    <property name="text">
@@ -856,13 +872,29 @@ profiles are available</string>
    </property>
   </action>
   <action name="action3_keys_1_knob">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>3 keys + 1 knob</string>
    </property>
   </action>
   <action name="action12_keys_2_knobs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>12 keys + 2 knobs</string>
+   </property>
+  </action>
+  <action name="actionUse_this_tool_with_your_keyboard">
+   <property name="text">
+    <string>Use this tool your keyboard</string>
+   </property>
+  </action>
+  <action name="actionAbout_BagOnKey">
+   <property name="text">
+    <string>About BagOnKey</string>
    </property>
   </action>
  </widget>

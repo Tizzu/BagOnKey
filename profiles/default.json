@@ -2,18 +2,6 @@
     "profileName": "default",
     "layout": [
         {
-            "name": "Copy",
-            "command": "ctrl+c"
-        },
-        {
-            "name": "Cut",
-            "command": "ctrl+x"
-        },
-        {
-            "name": "Paste",
-            "command": "ctrl+v"
-        },
-        {
             "name": "",
             "command": ""
         },
@@ -50,16 +38,28 @@
             "command": ""
         },
         {
-            "name": "Undo",
-            "command": "ctrl+z"
+            "name": "",
+            "command": ""
         },
         {
-            "name": "Save",
-            "command": "ctrl+s"
+            "name": "",
+            "command": ""
         },
         {
-            "name": "Redo",
-            "command": "ctrl+y"
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
+        },
+        {
+            "name": "",
+            "command": ""
         },
         {
             "name": "",

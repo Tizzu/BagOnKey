@@ -11,7 +11,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import Signal, QObject
 
-import shortcut, profiles, settings
+import shortcut, profiles, settings, specialFunctions, uiElements
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
@@ -21,32 +21,42 @@ class DropLabel(QtWidgets.QPushButton):
         self.setAcceptDrops(True)
 
     def dragEnterEvent(self, e):
-        self.setStyleSheet("border: 3px solid green;")
+        self.setStyleSheet("border-radius: 17px; border: 2px solid green;")
         e.accept()
 
     def dragLeaveEvent(self, e):
-        self.setStyleSheet("border: 3px solid black;")
+        self.setStyleSheet("border-radius: 17px; border: 2px solid black;")
         e.accept()
 
     def dropEvent(self, e):
-        self.setStyleSheet("border: 3px solid black;")
+        self.setStyleSheet("border-radius: 17px; border: 2px solid black;")
         widget = e.source()
         print(f"Button label: {widget.data}")
         # add the shortcut to the current profile
         shortcut = profiles.ProfileShortcut(widget.data, widget.shortcut)
         button_list = list(button_to_key.keys())
+        if shortcut.command.startswith("BagOnKey"):
+            if shortcut.command.split("|")[1] == "openLink":
+                shortcut.name, shortcut.command = specialFunctions.getNameAndLink()
+                if shortcut.name == None or shortcut.name == "" or shortcut.command == None or shortcut.command == "":
+                    e.accept()
+                    return
+            elif shortcut.command.split("|")[1] == "customShortcut":
+                shortcut.name, shortcut.command = specialFunctions.getCustomShortcut()
+                if shortcut.name == None or shortcut.name == "" or shortcut.command == None or shortcut.command == "":
+                    e.accept()
+                    return
         current_profile.layout[button_list.index(self.objectName())] = shortcut
-        print(f"Current profile: {current_profile}")
         save_profile()
         # update the button text
-        self.setText(widget.data)
+        self.setText(shortcut.name)
         e.accept()
     
     def enterEvent(self, e):
-        self.setStyleSheet("border: 3px solid blue;")
+        self.setStyleSheet("border-radius: 17px; border: 2px solid blue;")
 
     def leaveEvent(self, e):
-        self.setStyleSheet("border: 3px solid black;")
+        self.setStyleSheet("border-radius: 17px; border: 2px solid black;")
         
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.RightButton:
@@ -116,6 +126,8 @@ def change_layout(setting, save=False):
         dialog.knob4.hide()
         dialog.knob5.hide()
         dialog.knob6.hide()
+        threeKeys.setChecked(True)
+        twelveKeys.setChecked(False)
     elif setting == "classic":
         dialog.button4.show()
         dialog.button5.show()
@@ -130,6 +142,8 @@ def change_layout(setting, save=False):
         dialog.knob4.show()
         dialog.knob5.show()
         dialog.knob6.show()
+        threeKeys.setChecked(False)
+        twelveKeys.setChecked(True)
     if save:
         settings.selected_layout = setting
         settings.save_settings()
@@ -150,9 +164,9 @@ def reload_buttons():
     for profile in os.listdir("profiles"):
         profile_button = QtWidgets.QPushButton(profile.split(".")[0])
         if (profile.split(".")[0] == current_profile.profile_name):
-            profile_button.setStyleSheet("border: 3px solid green; padding: 5px;")
+            profile_button.setStyleSheet("border-radius: 17px; border: 3px solid green; padding: 5px;")
         else:
-            profile_button.setStyleSheet("border: 1px solid black; padding: 5px;")
+            profile_button.setStyleSheet("border-radius: 17px; border: 2px solid black; padding: 5px;")
         def on_profile_click(profile_name):
             global current_profile
             current_profile = load_profile(profile_name)
@@ -226,12 +240,11 @@ class PopupNotification(QtWidgets.QWidget):
 
         self.setStyleSheet("""
             QWidget {
-                background-color: rgba(30, 30, 30, 255);  /* Increase transparency by lowering alpha value */
+                background-color: rgba(30, 30, 30, 255);
                 color: white;
-                border-radius: 10px;
             }
             QLabel {
-                font-size: 16px;  /* Increase text size */
+                font-size: 16px;
             }
         """)
 
@@ -307,9 +320,9 @@ def load_profile(profile_name):
     # get the profiles list and make a green border to the selected profile, and a black border to the others
     for i in range(profiles_list_content.count()):
         if profiles_list_content.itemAt(i).widget().text() == name:
-            profiles_list_content.itemAt(i).widget().setStyleSheet("border: 3px solid green; padding: 5px;")
+            profiles_list_content.itemAt(i).widget().setStyleSheet("border-radius: 17px; border: 2px solid green; padding: 5px;")
         else:
-            profiles_list_content.itemAt(i).widget().setStyleSheet("border: 1px solid black; padding: 5px;")
+            profiles_list_content.itemAt(i).widget().setStyleSheet("border-radius: 17px; border: 2px solid black; padding: 5px;")
     # find the process name for the profile --> tracked_processes (profile_name, process_name)
     for profile_name, tracked_process in settings.tracked_processes:
         if profile_name == name:
@@ -398,7 +411,11 @@ def on_button_click(event):
         command = current_profile.layout[button_list.index(event)].command
     
     if (command != ""):
-        keyboard.press_and_release(command)
+        if (command.startswith("BagOnKey")):
+            if (command.split("|")[1] == "openLink"):
+                specialFunctions.openLink(command.split("|")[2])
+        else:
+            keyboard.press_and_release(command)
 
 
 def on_dialog_close(event):
@@ -440,7 +457,7 @@ class DragButton(QtWidgets.QPushButton):
         super().__init__(label, *args, **kwargs)
         self.data = label
         self.shortcut = shortcut
-        self.setStyleSheet("border: 1px solid black; padding: 5px;")
+        self.setStyleSheet("border-radius: 17px; border: 1px solid black; padding: 5px;")
 
     def mouseMoveEvent(self, e):
         if e.buttons() == QtCore.Qt.MouseButton.LeftButton:
@@ -645,6 +662,11 @@ def clearProcessName():
 
 process_cleaner.clicked.connect(lambda: clearProcessName())
 
+about_menu = dialog.actionAbout_BagOnKey
+about_menu.triggered.connect(uiElements.show_about_dialog)
+
+help_on_configuring = dialog.actionUse_this_tool_with_your_keyboard
+help_on_configuring.triggered.connect(uiElements.show_help_dialog)
 
 dialog.show()
 reload_buttons()

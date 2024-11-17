@@ -58,5 +58,15 @@
         "name": "Previous",
         "description": "Play the previous media",
         "function": "previous track"
+    },
+    {
+        "name": "Open Link",
+        "description": "Open a link",
+        "function": "BagOnKey|openLink"
+    },
+    {
+        "name": "Custom Shortcut",
+        "description": "Customize your own shortcut",
+        "function": "BagOnKey|customShortcut"
     }
 ]
