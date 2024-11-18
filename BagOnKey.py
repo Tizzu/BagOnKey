@@ -2,8 +2,7 @@ import keyboard
 import logging
 from PIL import Image, ImageDraw
 import threading
-import win32gui
-import win32process
+import win32gui, win32process, win32api, win32event, winerror
 import psutil
 import time
 import sys, os
@@ -14,6 +13,10 @@ from PySide6.QtCore import Signal, QObject
 import shortcut, profiles, settings, specialFunctions, uiElements
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+
+mutex = win32event.CreateMutex(None, False, 'BagOnKeyMutex')
+if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
+    sys.exit(0)
 
 class DropLabel(QtWidgets.QPushButton):
     def __init__(self, *args, **kwargs):

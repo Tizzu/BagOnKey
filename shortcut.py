@@ -13,4 +13,4 @@ def load_shortcuts(file_path):
     return shortcuts
 
 # Load shortcuts from the JSON file
-shortcuts = load_shortcuts('shortcuts.json')
+shortcuts = load_shortcuts('resources/shortcuts.json')
