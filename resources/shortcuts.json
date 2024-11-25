@@ -2,71 +2,85 @@
     {
         "name": "Copy",
         "description": "Copies the selected text",
+        "category": "Common Shortcuts",
         "function": "ctrl+c"
     },
     {
         "name": "Cut",
         "description": "Cuts the selected text",
+        "category": "Common Shortcuts",
         "function": "ctrl+x"
     },
     {
         "name": "Paste",
         "description": "Pastes the copied text",
+        "category": "Common Shortcuts",
         "function": "ctrl+v"
     },
     {
         "name": "Undo",
         "description": "Undo the last action",
+        "category": "Common Shortcuts",
         "function": "ctrl+z"
     },
     {
         "name": "Redo",
         "description": "Redo the last action",
+        "category": "Common Shortcuts",
         "function": "ctrl+y"
     },
     {
         "name": "Save",
         "description": "Save the current file",
+        "category": "Common Shortcuts",
         "function": "ctrl+s"
     },
     {
         "name": "Volume Up",
         "description": "Increase the volume",
+        "category": "Media Playback",
         "function": "volume up"
     },
     {
         "name": "Volume Down",
         "description": "Decrease the volume",
+        "category": "Media Playback",
         "function": "volume down"
     },
     {
         "name": "Mute",
         "description": "Mute the volume",
+        "category": "Media Playback",
         "function": "volume mute"
     },
     {
         "name": "Play/Pause",
         "description": "Play the media",
+        "category": "Media Playback",
         "function": "play/pause media"
     },
     {
         "name": "Next",
         "description": "Play the next media",
+        "category": "Media Playback",
         "function": "next track"
     },
     {
         "name": "Previous",
         "description": "Play the previous media",
+        "category": "Media Playback",
         "function": "previous track"
     },
     {
         "name": "Open Link",
         "description": "Open a link",
+        "category": "Custom",
         "function": "BagOnKey|openLink"
     },
     {
         "name": "Custom Shortcut",
         "description": "Customize your own shortcut",
+        "category": "Custom",
         "function": "BagOnKey|customShortcut"
     }
 ]

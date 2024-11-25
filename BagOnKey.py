@@ -227,9 +227,24 @@ class PopupNotification(QtWidgets.QWidget):
             QtCore.Qt.Tool
         )
         self.setAttribute(QtCore.Qt.WA_ShowWithoutActivating)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # Ensure the background is transparent
 
         global dial_position
-        layout = QtWidgets.QHBoxLayout(self)
+
+        # Create a frame to hold the layout and apply the squircle effect
+        self.frame = QtWidgets.QFrame(self)
+        self.frame.setStyleSheet("""
+            QFrame {
+                background-color: rgba(30, 30, 30, 255);
+                border-radius: 15px;
+            }
+            QLabel {
+                color: white;
+                font-size: 16px;
+            }
+        """)
+
+        layout = QtWidgets.QHBoxLayout(self.frame)
 
         # Add icon to the popup
         icon_label = QtWidgets.QLabel()
@@ -241,18 +256,26 @@ class PopupNotification(QtWidgets.QWidget):
         label = QtWidgets.QLabel(f"Profile: {profile_name}")
         layout.addWidget(label)
 
-        self.setStyleSheet("""
-            QWidget {
-                background-color: rgba(30, 30, 30, 255);
-                color: white;
-            }
-            QLabel {
-                font-size: 16px;
-            }
-        """)
-
+        self.frame.adjustSize()
         self.adjustSize()
         self.move_to_corner()
+
+        # Add opacity effect
+        self.opacity_effect = QtWidgets.QGraphicsOpacityEffect(self)
+        self.setGraphicsEffect(self.opacity_effect)
+
+        # Create fade-in animation
+        self.fade_in_animation = QtCore.QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.fade_in_animation.setDuration(500)
+        self.fade_in_animation.setStartValue(0.0)
+        self.fade_in_animation.setEndValue(1.0)
+
+        # Create fade-out animation
+        self.fade_out_animation = QtCore.QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.fade_out_animation.setDuration(500)
+        self.fade_out_animation.setStartValue(1.0)
+        self.fade_out_animation.setEndValue(0.0)
+        self.fade_out_animation.finished.connect(self.hide_notification)
 
     def move_to_corner(self):
         # Get mouse cursor position
@@ -282,7 +305,14 @@ class PopupNotification(QtWidgets.QWidget):
         self.activateWindow()
         self.raise_()
         self.show()
-        QtCore.QTimer.singleShot(duration, self.close)
+        self.fade_in_animation.start()
+        QtCore.QTimer.singleShot(duration, self.start_fade_out)
+
+    def start_fade_out(self):
+        self.fade_out_animation.start()
+
+    def hide_notification(self):
+        self.close()
 
 
 
@@ -456,10 +486,11 @@ def refresh_description(desc):
     description_layout.addWidget(QtWidgets.QLabel(desc))
 
 class DragButton(QtWidgets.QPushButton):
-    def __init__(self, label, shortcut, *args, **kwargs):
+    def __init__(self, label, shortcut, description, *args, **kwargs):
         super().__init__(label, *args, **kwargs)
         self.data = label
         self.shortcut = shortcut
+        self.description = description
         self.setStyleSheet("border-radius: 17px; border: 1px solid black; padding: 5px;")
 
     def mouseMoveEvent(self, e):
@@ -473,6 +504,7 @@ class DragButton(QtWidgets.QPushButton):
             drag.setPixmap(pixmap)
 
             drag.exec(QtCore.Qt.DropAction.MoveAction)
+            refresh_description(self.description)
             self.show() 
 
 def delete_dialog(profile_name):
@@ -601,10 +633,39 @@ description_scroll_area = dialog.description
 description_widget = QtWidgets.QWidget()
 description_layout = QtWidgets.QVBoxLayout()
 
+class CollapsibleWidget(QtWidgets.QWidget):
+    def __init__(self, title, parent=None):
+        super().__init__(parent)
+        self.setLayout(QtWidgets.QVBoxLayout())
+        
+        self.toggle_button = QtWidgets.QPushButton(title)
+        self.toggle_button.setCheckable(True)
+        self.toggle_button.setChecked(True)
+        self.toggle_button.clicked.connect(self.toggle)
+
+        self.group_box = QtWidgets.QGroupBox()
+        self.group_layout = QtWidgets.QVBoxLayout()
+        self.group_box.setLayout(self.group_layout)
+        
+        self.layout().addWidget(self.toggle_button)
+        self.layout().addWidget(self.group_box)
+
+    def add_button(self, button):
+        self.group_layout.addWidget(button)
+
+    def toggle(self, checked):
+        self.group_box.setVisible(checked)
+
+last_category = ""
+
 for i in shortcut.shortcuts:
-    button = DragButton(i.name, i.function)
+    if i.category != last_category:
+        last_category = i.category
+        collapsible_widget = CollapsibleWidget(i.category)
+        content_layout.addWidget(collapsible_widget)
+    button = DragButton(i.name, i.function, i.description)
     button.clicked.connect(lambda _, desc=i.description: refresh_description(desc))
-    content_layout.addWidget(button)
+    collapsible_widget.add_button(button)
 
 content_widget.setLayout(content_layout)
 scroll_area.setWidget(content_widget)

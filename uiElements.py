@@ -1,6 +1,8 @@
 from PySide6 import QtGui, QtWidgets
 from PySide6 import QtCore
 
+version = "1.2"
+
 def show_about_dialog():
     about_dialog = QtWidgets.QDialog()
     about_dialog.setWindowTitle("About")
@@ -16,10 +18,10 @@ def show_about_dialog():
     #center the text and button
     layout.setAlignment(QtCore.Qt.AlignCenter)
     # Fix the clickable link in the label
-    label_text = """
+    label_text = f"""
     BagOnKey is a tool to create custom shortcuts for your keyboard<br><br>
     Made with &lt;3 by Valentino Artizzu<br>
-    <a href='https://tizzu.github.io'>My website</a><br><br>Made with Python and Qt
+    <a href='https://tizzu.github.io'>My website</a><br><br>Made with Python and Qt - version {version}
     """
     label = QtWidgets.QLabel(label_text)
     label.setOpenExternalLinks(True)
