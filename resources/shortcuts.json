@@ -72,6 +72,24 @@
         "function": "previous track"
     },
     {
+        "name": "Previous Profile",
+        "description": "Switch to the previous profile",
+        "category": "Profile Switching",
+        "function": "BagOnKey|previousProfile"
+    },
+    {
+        "name": "Next Profile",
+        "description": "Switch to the next profile",
+        "category": "Profile Switching",
+        "function": "BagOnKey|nextProfile"
+    },
+    {
+        "name": "Switch Profile",
+        "description": "Switch to a specific profile",
+        "category": "Profile Switching",
+        "function": "BagOnKey|switchProfile"
+    },
+    {
         "name": "Open Link",
         "description": "Open a link",
         "category": "Custom",

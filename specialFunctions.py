@@ -1,5 +1,6 @@
 import webbrowser
 from PySide6.QtWidgets import QApplication, QDialog, QLineEdit, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+import os
 
 def openLink(link):
     webbrowser.open(link)
@@ -81,3 +82,32 @@ def getCustomShortcut():
         return name, link
     else:
         return None, None
+
+def selectProfile():
+    # Recover the list of profiles from profiles.py and return the selected profile in the UI as a string
+    profiles_names = [f.split(".")[0] for f in os.listdir("profiles") if f.endswith(".json")]
+    # Create a dialog with a list of profiles, when the user selects one, return the name of the profile
+    QApplication.instance()
+    dialog = QDialog()
+    dialog.setWindowTitle('Select Profile')
+    layout = QVBoxLayout()
+    selected_profile = None
+
+    def set_selected_profile(profile):
+        nonlocal selected_profile
+        selected_profile = profile
+        dialog.accept()
+
+    for profile in profiles_names:
+        button = QPushButton(profile)
+        layout.addWidget(button)
+        button.clicked.connect(lambda _, p=profile: set_selected_profile(p))
+    dialog.setLayout(layout)
+    # Add a cancel button
+    buttonCancel = QPushButton('Cancel')
+    layout.addWidget(buttonCancel)
+    buttonCancel.clicked.connect(dialog.reject)
+    if dialog.exec() == QDialog.Accepted:
+        return f"BagOnKey|switchProfile|{selected_profile}"
+    else:
+        return None

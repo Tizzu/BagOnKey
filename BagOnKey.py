@@ -46,6 +46,12 @@ class DropLabel(QtWidgets.QPushButton):
                 if shortcut.name == None or shortcut.name == "" or shortcut.command == None or shortcut.command == "":
                     e.accept()
                     return
+            elif shortcut.command.split("|")[1] == "switchProfile":
+                shortcut.command = specialFunctions.selectProfile()
+                shortcut.name = f'{shortcut.command.split("|")[2]} Profile'
+                if shortcut.name == None or shortcut.name == "":
+                    e.accept()
+                    return
         app_instance.current_profile.layout[button_list.index(self.objectName())] = shortcut
         app_instance.save_profile()
         # update the button text
@@ -76,6 +82,11 @@ class DropLabel(QtWidgets.QPushButton):
 
 
 class BagOnKeyApp(QtWidgets.QApplication):
+
+    cycle_profiles_forward = Signal()
+    cycle_profiles_backward = Signal()
+    jump_to_profile = Signal(str)
+
     def __init__(self, sys_argv):
         super().__init__(sys_argv)
         # Initialize mutex
@@ -102,6 +113,12 @@ class BagOnKeyApp(QtWidgets.QApplication):
         self.process_monitor.process_changed.connect(self.on_process_change)
         monitor_thread = threading.Thread(target=self.process_monitor.monitor_process, daemon=True)
         monitor_thread.start()
+        self.cycle_profiles_forward.connect(self.cycle_profiles_forward_slot)
+        self.cycle_profiles_backward.connect(self.cycle_profiles_backward_slot)
+        self.jump_to_profile.connect(self.load_profile)
+        self.current_profile = self.load_profile(settings.last_selected_profile)
+        self.profile_names = self.recover_profiles_names()
+        self.current_profile_index = self.profile_names.index(self.current_profile.profile_name)
 
     def setup_ui(self):
         # Initialize UI elements
@@ -159,6 +176,10 @@ class BagOnKeyApp(QtWidgets.QApplication):
             "knob5": 'alt+shift+5',
             "knob6": 'alt+shift+6'
         }
+        # Initialize profile names and current profile index
+        self.profile_names = self.recover_profiles_names()
+        self.current_profile_index = self.profile_names.index(settings.last_selected_profile)
+        
         # Connect signals and slots
         self.dialog.actionExit.triggered.connect(self.quit)
         # Load the initial profile
@@ -209,6 +230,9 @@ class BagOnKeyApp(QtWidgets.QApplication):
                 keyboard.add_hotkey(key, self.on_button_click, args=(key,), suppress=True)
         # Populate the shortcuts list
         self.populate_shortcuts()
+    
+    def recover_profiles_names(self):
+        return [f.split(".")[0] for f in os.listdir("profiles") if f.endswith(".json")]
 
     def populate_shortcuts(self):
         last_category = ""
@@ -343,6 +367,7 @@ class BagOnKeyApp(QtWidgets.QApplication):
                 self.process_label_change(tracked_process)
                 break
         self.default_checkbox.setChecked(name == settings.default_profile)
+        self.current_profile_index = self.profile_names.index(name)
         return profile
 
     def reload_buttons(self):
@@ -402,6 +427,14 @@ class BagOnKeyApp(QtWidgets.QApplication):
         
         def on_yes_clicked():
             profiles.delete_profile(f'profiles/{profile_name}.json')
+            self.profile_names = self.recover_profiles_names()
+            for profile in self.profile_names:
+                profile_data = profiles.load_profile(f'profiles/{profile}.json')
+                for shortcut in profile_data.layout:
+                    if shortcut.command == f"BagOnKey|switchProfile|{profile_name}":
+                        shortcut.command = ""
+                        shortcut.name = ""
+                profiles.save_profile(profile_data, f'profiles/{profile}.json')
             self.current_profile = self.load_profile("default")
             settings.tracked_processes = [x for x in settings.tracked_processes if x[0] != profile_name]
             settings.save_tracked_processes()
@@ -437,6 +470,7 @@ class BagOnKeyApp(QtWidgets.QApplication):
         def on_create_clicked():
             profile_name = input_field.text()
             profiles.create_profile(f'profiles/{profile_name}.json', profile_name)
+            self.profile_names = self.recover_profiles_names()
             self.current_profile = self.load_profile(profile_name)
             settings.tracked_processes.append([profile_name, "None"])
             settings.save_tracked_processes()
@@ -480,11 +514,19 @@ class BagOnKeyApp(QtWidgets.QApplication):
             #get the tracked process before it gets deleted from the renaming
             tracked_process = [x[1] for x in settings.tracked_processes if x[0] == profile_name][0]
             profiles.rename_profile(new_profile_name, self.current_profile, f'profiles/{profile_name}.json', f'profiles/{new_profile_name}.json')
+            self.profile_names = self.recover_profiles_names()
             self.current_profile = self.load_profile(new_profile_name)
             # get the process name of the profile
             settings.tracked_processes = [x for x in settings.tracked_processes if x[0] != profile_name]
             settings.tracked_processes.append([new_profile_name, tracked_process])
             settings.save_tracked_processes()
+            for profile in self.profile_names:
+                profile_data = profiles.load_profile(f'profiles/{profile}.json')
+                for shortcut in profile_data.layout:
+                    if shortcut.command == f"BagOnKey|switchProfile|{profile_name}":
+                        shortcut.command = f"BagOnKey|switchProfile|{new_profile_name}"
+                        shortcut.name = f"{new_profile_name} Profile"
+                profiles.save_profile(profile_data, f'profiles/{profile}.json')
             self.reload_buttons()
             rename_dialog.accept()
         
@@ -547,6 +589,12 @@ class BagOnKeyApp(QtWidgets.QApplication):
             if (command.startswith("BagOnKey")):
                 if (command.split("|")[1] == "openLink"):
                     specialFunctions.openLink(command.split("|")[2])
+                elif (command.split("|")[1] == "previousProfile"):
+                    self.cycle_profiles_backward.emit()
+                elif (command.split("|")[1] == "nextProfile"):
+                    self.cycle_profiles_forward.emit()
+                elif (command.split("|")[1] == "switchProfile"):
+                    self.jump_to_profile.emit(command.split("|")[2])
             else:
                 keyboard.press_and_release(command)
 
@@ -579,6 +627,16 @@ class BagOnKeyApp(QtWidgets.QApplication):
                 break
         if not found and settings.default_profile != "":
             self.current_profile = self.load_profile(settings.default_profile)
+    
+    def cycle_profiles_forward_slot(self):
+        self.current_profile_index = (self.current_profile_index + 1) % len(self.profile_names)
+        profile_name = self.profile_names[self.current_profile_index]
+        self.current_profile = self.load_profile(profile_name)
+    
+    def cycle_profiles_backward_slot(self):
+        self.current_profile_index = (self.current_profile_index - 1) % len(self.profile_names)
+        profile_name = self.profile_names[self.current_profile_index]
+        self.current_profile = self.load_profile(profile_name)
 
 class CustomUiLoader(QUiLoader):
     def createWidget(self, className, parent=None, name=''):
